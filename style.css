@@ -1,0 +1,104 @@
+html
+	{
+	  overflow-x: auto;
+	  overflow-y: scroll;
+		}
+
+body
+	{
+		color : #FF0000;
+		font-family : Verdana, Arial, sans-serif;
+		font-size : 11pt; 
+		vertical-align : top;
+		background: #fff;
+		text-align: center;
+								    }
+
+#container
+	{
+//		max-width: 800px;
+		width: 800px;
+		padding: 30px;
+		border: 1px solid #ccc;
+		background: #ffff00;
+		margin: 0 auto; /* align for good browsers */
+	  text-align: left; /* counter the body center */
+	  }
+
+#body
+{
+position: relative;
+padding: 4em 0 0 0;
+}
+
+#menu
+{
+position: relative;
+//top: 270px;
+}
+
+
+A {
+ text-decoration : none;
+ color : #a54024; 
+}
+
+A:visited {
+	 color : #a54024; 
+}
+
+A:hover {
+	text-decoration : underline;
+}
+
+
+
+
+#top_logo {
+		margin: 0 auto; /* align for good browsers */
+		top: 0em;
+		width: 185px;
+		//height: 210px;
+		color: #000000;
+		border: 0px;
+		padding: 20px 460px
+		0em 0px;
+}
+
+
+
+
+
+
+#miniflex {
+	 width: 730px;
+	 float: left;
+	 font-size: small; /* could be specified at a higher level */
+	 margin: 0 0 0 0;
+	 padding: 0 10px 0 70px;
+	 border-bottom: 1px solid #333;
+	 }
+
+#miniflex li {
+	 float: left;
+	 margin: 0; 
+	 padding: 0;
+	 display: inline;
+	 list-style: none;
+	 }
+	 
+#miniflex a:link, #miniflex a:visited {
+	 float: left;
+	 font-size: 85%;
+	 line-height: 20px;
+	 font-weight: bold;
+	 margin: 0 10px 0 10px;
+	 text-decoration: none;
+	 color: #555555;
+	 }
+
+#miniflex a.active:link, #miniflex a.active:visited, #miniflex a:hover {
+	 border-bottom: 4px solid #a54024;
+	 padding-bottom: 2px;
+	 color: #a54024;
+	 }
