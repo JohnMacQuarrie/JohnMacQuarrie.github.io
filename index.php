@@ -1,3 +1,4 @@
+ <!--
 <html><head>
 
     <title>John MacQuarrie</title>
@@ -171,11 +172,12 @@
             return false;
         }
     }
-    -->
-            </script>	
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head>
     
-    <!-- Everthing above was included by "<?php include("header.txt"); ?>" but I don't know how to make it work -->
+            </script>	
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head> -->
+    
+    <!-- Everything above was included by "" but I don't know how to make it work -->
+    <?php include("header.txt"); ?>
 
 
 
