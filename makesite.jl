@@ -22,29 +22,40 @@ pages = [
 
 for currentpage in pages
 
-    # UPDATES ENGLISH MENU:
 
-    newpage = ""
-    
+    # UPDATES PREAMBLE:
+
+    newpage = ""  
     oldpage = read(currentpage, String)
-
     r = nothing
-
-    r = findnext("<!--ENGMENU-->", oldpage, 1) 
-
+    r = findnext("<!--PREAMBLE-->", oldpage, 1) 
     if typeof(r) != Nothing
-    
         s = last(r)
-        t = first( findnext("<!--ENGMENU-->", oldpage, s) )
-
-        menu = read("./englishmenu.html", String)
-
+        t = first( findnext("<!--PREAMBLE-->", oldpage, s) )
+        menu = read("./preamble.html", String)
         newpage = oldpage[1:s]*menu*oldpage[t:end]
-
     else
         newpage = oldpage
     end
+    page = open(currentpage, "w")
+    write(page, newpage)
+    close(page)
 
+
+    # UPDATES ENGLISH MENU:
+
+    newpage = ""  
+    oldpage = read(currentpage, String)
+    r = nothing
+    r = findnext("<!--ENGMENU-->", oldpage, 1) 
+    if typeof(r) != Nothing
+        s = last(r)
+        t = first( findnext("<!--ENGMENU-->", oldpage, s) )
+        menu = read("./englishmenu.html", String)
+        newpage = oldpage[1:s]*menu*oldpage[t:end]
+    else
+        newpage = oldpage
+    end
     page = open(currentpage, "w")
     write(page, newpage)
     close(page)
@@ -53,27 +64,18 @@ for currentpage in pages
 
     # UPDATES PORTUGUESE MENU:
 
-    newpage = ""
-    
+    newpage = ""  
     oldpage = read(currentpage, String)
-
     r = nothing
-
     r = findnext("<!--PORMENU-->", oldpage, 1) 
-
     if typeof(r) != Nothing
-    
         s = last(r)
         t = first( findnext("<!--PORMENU-->", oldpage, s) )
-
         menu = read("./portuguesemenu.html", String)
-
         newpage = oldpage[1:s]*menu*oldpage[t:end]
-
     else
         newpage = oldpage
     end
-
     page = open(currentpage, "w")
     write(page, newpage)
     close(page)
