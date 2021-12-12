@@ -4,11 +4,13 @@
 pages = [
     "./index.html", 
     "./research/index.html",
+    "./research/pubsen.html",
     "./students/index.html",
     "./teaching/index.html",
     "./contact/index.html",
     "./links/index.html",
     "./research/pt.html",
+    "./research/pubspt.html",
     "./students/pt.html",
     "./teaching/pt.html",
     "./contact/pt.html",
