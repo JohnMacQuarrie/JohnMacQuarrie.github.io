@@ -3,8 +3,16 @@
 
 pages = [
     "./index.html", 
-    "./contact/index.html",
     "./research/index.html",
+    "./students/index.html",
+    "./teaching/index.html",
+    "./contact/index.html",
+    "./links/index.html",
+    "./research/pt.html",
+    "./students/pt.html",
+    "./teaching/pt.html",
+    "./contact/pt.html",
+    "./links/pt.html",
     "./pt/index.html"
 ]
 
