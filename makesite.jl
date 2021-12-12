@@ -3,22 +3,28 @@
 
 pages = [
     "./index.html", 
-    "./contact/index.html"
+    "./contact/index.html",
+    "./research/index.html"
 ]
 
+
+
 for currentpage in pages
+
+    newpage = ""
     
     oldpage = read(currentpage, String)
 
     r = nothing
 
-    r = findnext("<!--ENGPREAMBLE-->", oldpage, 1) 
+    r = findnext("<!--ENGMENU-->", oldpage, 1) 
 
     if typeof(r) != Nothing
+    
         s = last(r)
-        t = first( findnext("<!--ENGPREAMBLE-->", oldpage, s) )
+        t = first( findnext("<!--ENGMENU-->", oldpage, s) )
 
-        menu = read("./englishheader.html", String)
+        menu = read("./englishmenu.html", String)
 
         newpage = oldpage[1:s]*menu*oldpage[t:end]
 
