@@ -6,7 +6,7 @@
 
     
 
-    <title>John MacQuarrie</title>
+    <title>HH code</title>
 
 
 
@@ -210,24 +210,11 @@
     
 
 <div id="title">
-  <div align="right">Research</div>
+  <div align="right">HH for incidence algebras, Sage code</div>
 </div>
 
 
-<!--ENGMENU-->
 
-<div id="coolmenu">
-  <p><img src="https://johnmacquarrie.github.io/fromwhats.jpeg" width="200" height="255"></p>
-  <p><a href="https://johnmacquarrie.github.io/" class="style1" onMouseover="showtext('Front page.  Not much going on (t)here but you have to start somewhere I guess.')" onMouseout="hidetext()">Home</a>
-    <a href="https://johnmacquarrie.github.io/research/" onMouseover="showtext('More details about what I do in research and who I am working with.')" onMouseout="hidetext()">Research</a>
-    <a href="https://johnmacquarrie.github.io/students/" onMouseover="showtext('My students past and present, and project suggestions when I have something specific in mind.')" onMouseout="hidetext()">Students</a>
-    <a href="https://johnmacquarrie.github.io/teaching/" onMouseover="showtext('Materials relating to courses I teach or have taught.')" onMouseout="hidetext()">Teaching</a>
-	<!--<a href="http://personalpages.manchester.ac.uk/postgrad/john.macquarrie/nogames.php" onMouseover="showtext('I love games and if you would be willing it would be great if you would play them with me.  You might like them, everyone is in the minority sometimes.')" onMouseout="hidetext()">Non-Academic</a> -->
-    <a href="https://johnmacquarrie.github.io/contact/" onMouseover="showtext('My contact details.  Technically my office has a phone I think but to be honest, best to send an email.')" onMouseout="hidetext()">Contact Me</a>
-	<!--<a href="https://johnmacquarrie.github.io/links/" onMouseover="showtext('Links to things I like, maths related or otherwise.')" onMouseout="hidetext()">External Links</a> -->
-	<a href="https://johnmacquarrie.github.io/pt/" onMouseover="showtext('O mesmo site em português. <br> The same site in Portuguese.')" onMouseout="hidetext()">Português</a>
-
-  <!--ENGMENU-->
 
   </p>
   <div id="tabledescription"></div>
@@ -239,231 +226,205 @@
 <div id="textbox">
 
 
-<p> The articles below have links to where they can be read for free.  Most are on the arXiv, and at least one that isn't is in an 
-    open access journal.  The articles go from oldest to newest, since it makes them easier to talk about.  The word "Selected" 
-    below is brilliant because as far as you know there might be hundreds of articles I didn't select! (there's literally one).
+ <p>
+   
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Formatted Code</title>
+  <style>
+    body {
+      font-family: monospace;
+      background-color: #f7f7f7;
+    }
+    pre {
+      background: #ffffff;
+      padding: 1em;
+      border: 1px solid #ccc;
+      overflow-x: auto;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+<pre><code>
+#GAP FUNCTIONS CALLED IN SAGE    
+Indeterminate = libgap.eval("I:=function(x,y) return Indeterminate(x,y); end;");
+StringFormatted = libgap.eval("S:=function(x,y,z,w) return StringFormatted(x,y,z,w);end;");
+StF = libgap.eval("St:=function(x,y,z) return StringFormatted(x,y,z);end;");
+VectorSpace = libgap.eval("V:=function(x,y,z) return VectorSpace(x,y,z);end;");
+Cyclesmap = libgap.eval(
+"Cyclesmap:=function(Source,Range,cycle)local Im,i,f,D;
+ D:=GeneratorsOfVectorSpace(Source);
+ Im:=[];
+ for i in [1..Length(cycle)] do
+   Add(Im, LinearCombination(Basis(Range), cycle[i][1]));
+ od;
+ f:=LeftModuleGeneralMappingByImages(Source, Range, D, Im);
+ return f;
+ end;"
+);
+
+Z_CycleSpace = libgap.eval(
+"Z_CycleSpace:=function(cycles,zlist,Source,f)local K, zSubspace, i, j, aux,
+ VerticesOfCycles, CoefficientsOfCycles, T;
+ CoefficientsOfCycles:=[];
+ if Length(zlist)&gt;0 then
+   K:=BasisVectors(Basis((Kernel(RestrictedMapping(f, Subspace(Source,zlist))))));
+   for i in [1..Length(K)] do
+     Add(CoefficientsOfCycles,Coefficients(Basis(Source), K[i]));
+   od;
+ fi;
+ T:=CoefficientsOfCycles;
+ return T;
+ end;"
+);
+
+BasisComplement = libgap.eval(
+"BasisComplement:=function(Aux_Bzminus,Aux_Ciplus, i, OurDomain,OurField)
+ local F,Kzminus,t,BC;
+ BC:=[];
+ F:=OurField^Length(OurDomain);
+ if Length(Aux_Bzminus)&gt;0 then
+   KZminus:=Subspace(F, Aux_Bzminus);
+   for t in [1..Length(Aux_Ciplus[i][1])] do
+     if (Aux_Ciplus[i][1][t] in KZminus)=false then
+       Add(BC, [Aux_Ciplus[i][1][t], Aux_Ciplus[i][2]]);
+       Add(Aux_Bzminus, Aux_Ciplus[i][1][t]);
+       KZminus:=Subspace(F, Aux_Bzminus);
+     fi;
+   od;
+ else
+   for t in [1..Length(Aux_Ciplus[i][1])] do
+     Add(BC, [Aux_Ciplus[i][1][t],Aux_Ciplus[i][2]]);
+   od;
+ fi;
+ return BC;
+ end;"
+)
+
+
+def HH(X, c, h, y, xplus):
+    # X = extended poset
+    # h = x^*
+    # c = characteristic of OurField
+    # y = y^*
+    # xplus = immediate successors of x^*
+    
+    if c == 0:
+        OurField = QQ
+    else:
+        OurField = GF(c)
+
+    candidates = list(X)
+
+    countHH = 0
+    q = 1
+
+    # Building C^1
+    
+    OurDomain = [Indeterminate(OurField, "x")]  
+    iminusCycles = [[1,h]]        
+    
+    iCycles = []
+    for j in xplus:
+        iCycles.append([[1], j])
+
+    if len(iCycles) == 0:
+        print(" dim HH^i = 0 for all i.")
+        q = -1
+    elif len(iCycles) == 1:
+        print(" dim HH^0 = 1 for i=1.")
+        print(" dim HH^i = 0 for i&gt;1.")
+        q = -1
+    else:
+        q += 1
+
+    while q != -1:
+        
+        OurCodomain = OurDomain
+        OurDomain = []
+
+        if q == 2:
+            for i in range(len(iCycles)):
+                OurDomain.append(
+                    Indeterminate(
+                        OurField,
+                        StF("[{}, {}]", OurCodomain[0], iCycles[i][1])
+                    )
+                )
+        else:
+            for i in range(len(iCycles)):
+                OurDomain.append(
+                    Indeterminate(
+                        OurField,
+                        StringFormatted("[w^{}_{}, {}]", q-1, i, iCycles[i][1])
+                    )
+                )
+
+        SourceSpace = VectorSpace(OurField, OurDomain, "basis")
+        RangeSpace = VectorSpace(OurField, OurCodomain, "basis")
+        f = Cyclesmap(SourceSpace, RangeSpace, iCycles)
+
+        iminusCycles = []
+        for i in range(len(iCycles)):
+            iminusCycles.append([iCycles[i][0], Integer(iCycles[i][1])])
+
+        iCycles = []
+        Aux_Ciplus = []
+
+        for k in candidates:
+            zSubspace = []	
+            for i in range(len(iminusCycles)):
+                if X.is_less_than(iminusCycles[i][1], k):
+                    zSubspace.append(OurDomain[i])
+            if zSubspace != []:		   
+                T = Z_CycleSpace(iminusCycles, zSubspace, SourceSpace, f)
+                if T != []:
+                    Aux_Ciplus.append([T, k])
+
+        I = list(range(len(Aux_Ciplus)))
+
+        for i in I:
+            Aux_Bzminus = set([])
+            for j in I:
+                if Aux_Ciplus[j][1] in X.lower_covers(Aux_Ciplus[i][1]):
+                    Aux_Bzminus.update(Aux_Ciplus[j][0])
+            BC = BasisComplement(
+                list(Aux_Bzminus),
+                Aux_Ciplus,
+                i+1,
+                OurDomain,
+                OurField
+            )
+            if len(BC) != 0: 
+                [iCycles.append(a) for a in BC]
+			
+        if len(iCycles) == 0:
+            print(f" dim HH^i = 0 for i&gt;", q-3)
+            q = -1
+        else:
+            for i in range(len(iCycles)):
+                if iCycles[i][1] == y:
+                    countHH += 1
+
+            if q == 2:
+                print(f" dim HH^", q-2, " = ", countHH + 1)
+            else:
+                print(f" dim HH^", q-2, " = ", countHH)
+            
+            q += 1
+            countHH = 0
+</code></pre>
+
+</body>
+</html>
+
 </p>
-
-<br>
-
-<h2>Selected Publications</h2>
-
-<h4><a href="https://arxiv.org/abs/1011.3800" target="_blank" rel="noopener noreferrer">
-    Green correspondence for virtually pro-$p$ groups</a>, Journal of Algebra, 2010</h4>
-
-    <p> The second article from my thesis, wherein I prove a version of the Green Correspondence for virtually pro-$p$ groups.
-        The statement of the main theorem is complicated by the following question, which to this day I don't know the answer to: 
-        need a finitely generated indecomposable module have a finitely generated source?  Answers on a postcard!
-    </p>
-
-
-<h4><a href="https://arxiv.org/abs/1011.2899" target="_blank" rel="noopener noreferrer">
-    Modular representations of profinite groups</a>, Journal of Pure and Applied Algebra, 2011</h4>
-    
-        <p> The first article from my thesis and I'm still super proud of it.  The article develops what I've since discovered is 
-            called the "local-global" theory of modular representations of profinite groups.  Relative projectivity and vertices are 
-            introduced for arbitrary profinite groups, before restricting to the class of virtually pro-$p$ groups to discuss the much 
-            more delicate issues of sources and Green's indecomposability theorem.  The numbering on the arXiv version is inconsistent 
-            with the published version -- if you're curious why I don't just update it on the arXiv: me too!
-        </p>
-
-
-<h4><a href="https://arxiv.org/abs/1301.5625" target="_blank" rel="noopener noreferrer">
-    Brauer theory for profinite groups</a>, with Peter Symonds, Journal of Algebra, 2014</h4>
-    
-        <p> We study what Serre calls the "$cde$ triangle" for finite groups, in order to extend it as best we can to profinite 
-            groups.  The trick was to define several Grothendieck groups for finite groups as functors.  It then follows formally 
-            that they make sense for profinite groups.  Cooler yet: the maps "$d$" and "$e$" are natural transformations between these 
-            functors, so they ALSO make sense for profinite groups, for free!  For me the most interesting thing to come out of this 
-            approach is that the famous Cartan matrix (the "$c$") is NOT a natural object -- it's more-or-less a coincidence 
-            that its definition makes sense!  For me this is a convincing explanation why the Cartan matrix is so damn hard.
-        </p>
-
-<!--
-<h4><a href="https://link.springer.com/article/10.1007/s40863-016-0050-8" target="_blank" rel="noopener noreferrer">
-    Introduction to Brauer theory for profinite groups</a>, São Paulo Journal of Mathematical Sciences, 2016</h4>
-    
-        <p> There was a conference in Ubatuba to celebrate César Polcino's birthday, which I attended and loved.  
-            I wrote this little introduction to the above article with Peter for a proceedings for the conference.  I guess I 
-            didn't put it on the arXiv, so if you want it let me know and I'll try and root it out of storage!
-        </p>
-    -->
-
-<h4><a href="https://arxiv.org/abs/1408.2235" target="_blank" rel="noopener noreferrer">
-    Second Countable Virtually Free Pro-p Groups whose Torsion Elements have Finite Centralizer</a>, with Pavel Zalesskii,
-    Selecta Mathematica, 2017</h4>
-    
-        <p> The article coming out of my post-doc in Brasilia and the start of an abusive long-term relationship with Weiss' 
-            Theorem (who's abusing who I leave to the jury).  We prove a weaker version of Weiss' Theorem for certain infinitely 
-            generated modules -- a result strong enough to classify the profinite groups in the title.   
-        </p>
-
-
-
-<h4><a href="https://arxiv.org/abs/1704.06152" target="_blank" rel="noopener noreferrer">
-    The Path Algebra as a Left Adjoint Functor</a>, with Kostiantyn Iusenko,
-    Algebras and Representation Theory, 2020</h4>
-    
-        <p>  My first article with Kostia, and based on one big idea: the path algebra and Gabriel quiver constructions should be 
-            functors and should form an adjoint pair.  All very well on paper, and basically true, but the details are quite 
-            tricky.  Since then we've refined the categories and functors, so the constructions in this article seem maybe a bit 
-            clumsy in retrospect, but an exciting (to me) line of enquiry, with a lot still to do, began here. 
-        </p>
-
-
-<h4><a href="https://arxiv.org/abs/1803.01740" target="_blank" rel="noopener noreferrer">
-    Infinitely generated pseudocompact modules for finite groups and Weiss' Theorem</a>, with Peter Symonds and 
-    Pavel Zalesski, Advances in Mathematics, 2020</h4>
-
-    <p> We give lots of basic homological properties of pseudocompact algebras and modules over a complete discrete valuation 
-        ring.  The main goal of the paper was to give a clear and complete generalization of Weiss' Theorem to infinitely generated 
-        pseudocompact modules.  Although most of the work was going from finitely to infinitely generated modules, most of the 
-        citations come from the fact that Weiss' Theorem hadn't been proved before over a complete discrete valuation ring 
-        (fine by me! <span style="color: #ff0000">&hearts;</span>)
-    </p>
-
-        
-
-<h4><a href="https://arxiv.org/abs/1905.09886" target="_blank" rel="noopener noreferrer">
-    A Functorial Approach to Gabriel k-quiver Constructions for Coalgebras and Pseudocompact Algebras</a>, 
-    with Kostiantyn Iusenko and Samuel Quirino, Bulletin of the Brazilian Mathematical Society, 2020</h4>
-    
-        <p> Here we refine the categories considered in the article with Kostia above, and having done so observe that this done, 
-            everything holds for arbitrary pointed coalgebras and pseudocompact algebras.  The article suggests that useful 
-            properties of an algebra can be deduced formally by looking at algebras via their radical layers (cf. the final theorem).
-        </p>
-
-
-<h4><a href="https://www.elibm.org/article/10012054" target="_blank" rel="noopener noreferrer">
-    A characterization of permutation modules extending a theorem of Weiss</a>, with Pavel Zalesski,
-    Documenta Mathematica, 2020</h4>
-    
-        <p> Weiss' Theorem gives a sufficient condition for a $\Z_p$-lattice for a finite $p$-group to be a permutation module 
-            in terms of modules coming from a normal subgroup $N$, but the condition isn't necessary.  Pavel and I give a necessary 
-            and sufficient condition here, in the special but important case where $N$ has order $p$.  There is plenty more to be 
-            done in this direction but it's hard and not always clear what "should be" true.  This is my only published article 
-            that doesn't have inverse limits (unless you count $\Z_p$ which you could but it would be unsporting).
-        </p>
-
-
-
-<h4><a href="https://arxiv.org/abs/2105.10964" target="_blank" rel="noopener noreferrer">
-    Block theory and Brauer's first main theorem for profinite groups</a>, with Ricardo Franquiz, 
-    Advances in Mathematics, 2022</h4>
-
-    <p> It's really amazing how tractable block theory for profinite groups is compared to general representation theory.  My 
-        feeling is that representation theory gets very hard when an object has "lots of conjugates", and then the topology gets 
-        involved and makes a mess.  Since blocks are central, no conjugates!  We define the defect group of a block, prove some 
-        characterizations, and prove an absolutely clean Brauer Correspondence for arbitrary profinite groups.  As well as the 
-        usual profinite machinery, the "trick" was to define a sneaky variant of the trace map.   This map probably has more to 
-        give.
-    </p>
-
-
-<h4><a href="https://arxiv.org/abs/2107.02873" target="_blank" rel="noopener noreferrer">
-    Blocks of profinite groups with cyclic defect group</a>, with Ricardo Franquiz, Bulletin of the LMS, 2022</h4>
-        
-        <p> Blocks for finite groups are usually not very well understood, which is understandable given that group algebras are 
-            usually hard.  But blocks whose defect group is cyclic (that is, the blocks of finite type) have a very clean description 
-            as "Brauer tree algebras".  We classify the blocks of a profinite group whose defect group is cyclic, in the profinite 
-            sense.  Spoiler: blocks with finite cyclic defect group are just blocks of finite groups with cyclic defect group, and 
-            blocks with defect group $\Z_p$ are even easier! 
-        </p>
-
-
- <h4><a href="http://arxiv.org/abs/2306.02539" target="_blank" rel="noopener noreferrer">
-    Quotient bifinite extensions and the finitistic dimension conjecture</a>, with Fernando dos Reis Naves, Proceedings of the AMS, 2023 
-    (accepted)</h4>
-                
-        <p> Whether the finitistic dimension (that is, the supremum of the projective dimensions of those modules whose projective 
-            dimension is finite) is always finite for a finite dimensional algebra, is a very hard question that has been open for a 
-            long time.  We show that if a finite dimensional algebra $A$ has a subalgebra $B$ such that $A/B$ has finite 
-            projective dimension as a $B$-bimodule, then the finitude of the finitistic dimension passes from $A$ to $B$.  The 
-            subalgebra $B$ can be ''harder'' than $A$, so new examples of algebras with finite finitistic dimension can be constructed 
-            this way.
-        </p>
-
-        
-        <h4><a href="https://arxiv.org/abs/2207.06281" target="_blank" rel="noopener noreferrer">
-            Semisimplicity and separability for pseudocompact algebras</a>, with Kostiantyn Iusenko, Journal of Algebra and its Applications, 
-            2023 (accepted)</h4>
-            
-            <p> While studying pseudocompact algebras (<span style="color: #ff0000">&hearts;</span>) Kostia and I found the 
-                literature very tricky to navigate and widely spread out, so it was hard to even know if some basic fundamental property 
-                is known to hold.  This made the study of pseudocompact algebras much more difficult than it needed to be.  So half as 
-                public service and half as part of our pseudocompact propaganda campaign, we collect and prove here many fundamental 
-                results about semisimple and separable pseudocompact algebras.
-            </p>
-
-        <h4><a href="https://arxiv.org/abs/2206.13334" target="_blank" rel="noopener noreferrer">
-            Butler's Method applied to $\mathbb{Z}_p[C_p\times C_p]$-permutation modules</a>, with Marlon Stefano, Algebras 
-            and Representation Theory, 2024</h4>
-            
-             <p> In the article A characterization of permutation modules extending a theorem of Weiss with Pavel, the main theorem has 
-                the form ``The lattice $U$ is a permutation module if, and only if, Conditions A and B are satisfied''.  Small examples 
-                show that the result is false if we remove Condition A, but it was not clear whether Condition B is superfluous.  In this 
-                short article, we give a first application of a new method we're developing to analyze permutation modules, using a 
-                correspondence due to Butler: we prove the necessity of Condition B by providing (what seem to be highly non-trivial) 
-                examples of lattices satisfying Condition A which are not permutation modules.
-            </p>
-
-    <h4><a href="https://arxiv.org/abs/2108.12923" target="_blank" rel="noopener noreferrer">
-    Homological properties of extensions of abstract and pseudocompact algebras</a>, with Kostiantyn Iusenko, Mathematische 
-    Zeitschrift, 2025</h4>
-    
-        <p> In a sequence of articles, Cibils, Lanzillota, Marcos and Solotar develop the theory of a class of extensions of 
-            algebras that preserve the finiteness of the global dimension and of the Hochschild homology of the algebras.  We 
-            generalize this class of extensions so that it holds for algebras of interest to us, and prove that the homological 
-            properties are still preserved.  We also show that the finitistic dimension is preserved.  We have a suspicion that 
-            our extensions give interesting examples even for finite dimensional algebras, and give a "proof-of-concept" example.  
-            To do this, we give a "relative version" of the fact that an acyclic algebra has finite global dimension. 
-        </p>
-
-
-
-    <br>
-
-    <h2>Submitted or unpublished articles</h2>
-    
-
-<h4><a href="https://arxiv.org/abs/1203.5905" target="_blank" rel="noopener noreferrer">
-    Gradings, smash products and Galois coverings of a small category</a>, with Claude Cibils, Unpublished, 2012</h4>
-    
-        <p> In a sequence of articles, Claude Cibils, Maria Redondo and Andrea Solotar studied coverings of $k$-categories.  I was 
-            curious about what happens with normal categories ("no $k$") so Claude and I investigated.  In the end the referee 
-            complained quite fairly that plenty was already known, and we decided it would be a lot of trouble 
-            to figure out what's really new and what follows from results in the literature, so I guess this article won't be 
-            published.  But I learned loads from this work and I still kind of love it.
-        </p>
-
-
-
-<h4><a href="https://arxiv.org/abs/2411.07910" target="_blank" rel="noopener noreferrer">
-    Projective resolutions of simple modules and Hochschild cohomology for incidence algebras</a>, with Viktor Bekkert and 
-    Júlio Marques, submitted, 2024</h4>
-            
-        <p> The definition of Hochschild cohomology is beautiful, but actually calculating the groups is super hard in general.  
-            Here, we give an algorithm that calculates minimal projective resolutions of simple modules for finite dimensional 
-            incidence algebras, and hence (via a neat trick due to Cibils) the Hochschild cohomology groups of these 
-            algebras.  The algorithm is just basic linear algebra calculations, and it's pretty fast!
-        </p>
-
-
-
-
-
-
-
-        
-
-                
-       
-
-        
-       
-
-
-
 
 
 </div>
