@@ -1,0 +1,660 @@
+\documentclass[]{beamer}
+%
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+	\usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+	\usecolortheme{default} % or try albatross, beaver, crane, ...
+	\usefonttheme{default}  % or try serif, structurebold, ...
+	\setbeamertemplate{navigation symbols}{}
+	\setbeamertemplate{caption}[numbered]
+} 
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+
+\usepackage[all]{xy}
+\usepackage{ stmaryrd }
+
+\usepackage{pb-diagram}
+\usepackage{graphics}
+%\usepackage[all,cmtip]{xy}
+\usepackage{tikz-cd}
+\usepackage{tikz-qtree}
+\usepackage{forest}
+\usetikzlibrary{shapes.geometric,backgrounds}
+\usepackage{pgf,tikz,pgfplots}\pgfplotsset{compat=1.14}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usetikzlibrary{arrows}
+\usepackage{MnSymbol,wasysym}
+
+% \usepackage{mathabx}
+% \usepackage{lscape}
+% \usepackage{geometry}
+
+\DeclareSymbolFont{AMSb}{U}{msb}{m}{n}
+\DeclareMathSymbol{\N}{\mathbin}{AMSb}{"4E}
+\DeclareMathSymbol{\Z}{\mathbin}{AMSb}{"5A}
+\DeclareMathSymbol{\R}{\mathbin}{AMSb}{"52}
+\DeclareMathSymbol{\Q}{\mathbin}{AMSb}{"51}
+\DeclareMathSymbol{\I}{\mathbin}{AMSb}{"49}
+\DeclareMathSymbol{\C}{\mathbin}{AMSb}{"43}
+
+\newcommand{\dbl}{[\hspace{-0.2ex}[}
+\newcommand{\dbr}{]\hspace{-0.2ex}]}
+\newcommand{\db}[1]{\dbl {#1} \dbr}
+\newcommand{\res}[1]{\hspace{-0.6mm}\downarrow_{\hspace{-0.25mm}{#1}}}
+\newcommand{\ind}[1]{\hspace{-0.6mm}\uparrow^{\hspace{-0.25mm}{#1}}}
+\newcommand{\ctens}{\widehat{\otimes}}
+\newcommand{\prf}{\noindent\textbf{Proof}}
+\newcommand{\iso}{\cong}
+\newcommand{\invlim}{\underleftarrow{\textnormal{lim}}\,}
+\newcommand{\dirlim}{\underrightarrow{\textnormal{lim}}\,}
+\newcommand{\ds}{\raisebox{0.5pt}{\,\big|\,}}
+\newcommand{\onto}{\twoheadrightarrow}
+\newcommand{\incl}{\hookrightarrow}
+\newcommand{\id}{\textnormal{id}}
+\newcommand{\invim}[1]{{#1}^{\leftarrow}}
+\newcommand{\Hom}{\textnormal{Hom}}
+\newcommand{\X}{\mathfrak{X}}
+\newcommand{\Y}{\mathfrak{Y}}
+\newcommand{\norm}[1]{\textnormal{N}_{#1}}
+\newcommand{\End}{\textnormal{End}}
+\newcommand{\dbls}{(\hspace{-0.2ex}(}
+\newcommand{\dbrs}{)\hspace{-0.2ex})}
+\newcommand{\dbs}[1]{\dbls {#1} \dbrs}
+\newcommand{\rad}{\textnormal{rad}}
+\newcommand{\vertex}[1]{Q_{(#1)}}
+\newcommand{\GL}{\textnormal{GL}}
+\newcommand{\SL}{\textnormal{SL}}
+\newcommand{\dash}{\textnormal{-}}
+\newcommand{\tn}[1]{\textnormal{#1}}
+\newcommand{\cat}[1]{\tn{\textbf{#1}}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\bigO}{\mathcal{O}}
+%\newcommand{\deg}{\textnormal{SL}}
+
+\newcommand{\xonto}[2][]{%
+	\xrightarrow[#1]{#2}\mathrel{\mkern-14mu}\rightarrow
+}
+
+
+
+\title{Espaços vetoriais condensados}
+\author{John MacQuarrie}
+\institute{Universidade Federal de Minas Gerais}
+\date{Novembro, 2025}
+
+\begin{document}
+	
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+	% Uncomment these lines for an automatically generated outline.
+	%\begin{frame}{Outline}
+	%  \tableofcontents
+	%\end{frame}
+	
+	\section{Plan}
+	
+	\begin{frame}{Plano da palestra}
+		
+		\begin{enumerate}
+			\item Motivação e o problema principal
+                \item Matemática condensada
+                \item Trabalho novo
+		\end{enumerate}
+		
+		\bigskip
+		
+		Junto com Lucas Henrique de Souza (UFMG) e Jeremy Rickard (University of Bristol)
+		
+		\bigskip
+		
+		\small{Trabalho parcialmente apoiado por bolsas universal de CNPq and FAPEMIG, uma bolsa CNPq de produtividade, é uma bolsa PDJ (para Lucas) em parceria entre FAPEMIG e CNPq} 
+		
+		
+	\end{frame}
+
+
+
+	
+	
+	
+	\begin{frame}{Parte 1}
+		
+		\begin{block}
+			{Motivação e o problema principal}
+		\end{block}
+		
+	\end{frame}
+	
+	
+	
+	
+	
+	\begin{frame}{Moticação: representações de álgebras de dimensão finita}
+		
+		\onslide<1->{Este projeto surgiu da teoria de representações das álgebras pseudocompactas.}
+		
+		\medskip 
+		
+		\onslide<2->{Mas o que vou de fato falar não tem muito a ver com isso.  Será uma palestra sobre espaços vetoriais!}
+		
+		\bigskip 
+		
+		\onslide<3->{Então não se preocupa se álgebras e módulos não são tão familiares, pois não precisaremos delas!}
+	\end{frame}
+
+
+
+
+    	\begin{frame}{Teoria de Auslander-Reiten}
+		
+		\onslide<1->{Sejam $k$ um corpo e $A$ uma álgebra associativa de dimensão finita.  Queremos entender a categoria dos $A$-módulos de dimensão finita.}
+		
+		\medskip 
+		
+		\onslide<2->{A \alert{Teoria de Auslander-Reiten} nos dá uma abordagem para fazer isso tão poderosa que nem tem direto a existir.}
+		
+		\bigskip 
+		
+		\onslide<3->{Vamos analizar sequências exatas de $A$-módulos 
+        $$0\to V\to U \to W\to 0$$ com $W$ indecomponível.}
+        \onslide<4->{Se $W$ for projetivo, a sequência é split e não tem graça.}
+	\end{frame}
+
+
+
+
+\begin{frame}{Teoria de Auslander-Reiten}
+		
+		\onslide<1->{Mas para \alert{qualquer} $W$ indecomponível não projetivo, \alert{existe}(!) uma  \alert{única}(!) sequência exata ``quase split'' (que não vou definir) assim:}
+
+        \onslide<2->{$$0\to \tau(W)\to U\to W\to 0.$$}
+        \onslide<3->{e ainda mais, o módulo $\tau(W)$ é indecomponível!}
+		
+		\bigskip 
+		
+		\onslide<4->{Resumindo, a teoria de Auslander-Reiten relaciona os módulos indecomponíveis entre si.  Estas relações são \emph{fundamentais} na teoria moderna de representações.}
+        
+	\end{frame}
+
+\begin{frame}{Por que estou falando disso?}
+		
+		\onslide<1->{Dado $W$, existe uma construção explícita de $\tau(W)$.  Novamente não dou os detalhes, mas só quero dizer que a construção fica assim:}
+        \onslide<2->{$$\xymatrix{W\ar@{|->}[r]
+ & \textnormal{algo}(W) \ar@{|->}[r]
+ & \tau(W) = \textnormal{algo}(W)^*}$$}
+		\onslide<3->{em que $U^* = \tn{Hom}_k(U,k)$ é o $A$-módulo \emph{dual} de $U$.}
+		
+		\bigskip 
+		
+		\onslide<4->{Assim chave pra construção é que podemos \alert{dualizar} os $A$-módulos de dimensão finita!}
+	\end{frame}
+
+
+
+\begin{frame}{Minhas álgebras}
+
+\onslide<1->{Trabalharemos com $k$-espaços vetoriais topológicos.  Mas o corpo $k$ sempre será \alert{discreto}!}
+
+\begin{definition}[primeira que vale a pena lembrar]<2->
+    Um $k$-espaço vetorial topológico $V$ é \alert{linearmente compacto} (LC) se tem a forma
+    $$V = \prod_{I}k,$$
+    com a topologia do produto.  Categoria: $k\dash\cat{LC}$.  
+    
+    Objetos de $k\dash\cat{LC}$ são precisamente limites inversos de $k$-espaços vetoriais de dimensão finita.
+\end{definition}
+
+\medskip 
+    	
+		\onslide<3->{Eu trabalho com $k$-\alert{álgebras pseudocompactas}, cujos espaços vetoriais subjacentes são LC.}
+
+\end{frame}
+
+
+\begin{frame}{Propaganda para espaços vetoriais com topologia}
+
+\begin{itemize}
+    \item<2->{Em $k\dash\cat{Vec}$, sabemos que \alert{quando $V$ tem dimensão finita}, então $V^{**}\iso V$, e isso é super útil.}
+    \item<3->{Mas quando $\textcolor{blue}{V} = \bigoplus_I k$ com $|I| = \infty$, temos $V < V^* < V^{**}$ - a dupla dual fica MUITO maior que $V$.  Chato isso.}
+    \item<4->{Vamos fazer a conta em espaços vetoriais \alert{topológicos}.  Assim $\tn{Hom}_k$ significa homs \alert{contínuos}!}
+    \item<5->{Com o mesmo $\textcolor{blue}{V}$, temos $\textcolor{blue}{V}^* = \prod_Ik$ -- um espaço em $k\dash\cat{LC}$.}
+    \item<6->{A mágica é que pela topologia do produto, 
+    $$\textcolor{blue}{V}^{**} = \tn{Hom}_k(\prod_I k, k) \iso \textcolor{blue}{V},$$}
+    \item<7-> ou seja, $\textcolor{blue}{V}^{**}\iso \textcolor{blue}{V}$, como deve ser!  Mais precisamente, as categorias $k\dash\cat{Vec}$ e $k\dash\cat{LC}$ são duais.
+\end{itemize}
+
+
+\end{frame}
+
+
+
+
+
+\begin{frame}{Módulos}
+
+\onslide<1->{Uma álgebra pseudocompacta possui duas categorias de módulos topológicos bem comportados:}
+
+\begin{itemize}
+    \item<2->{$A\dash \cat{DMod}$ -- $A$-módulos discretos,  cujos espaços vetoriais subjacentes são discretos: objetos de $k\dash\cat{Vec}$ mesmo}%$\bigoplus_I k$.}
+    \item<3->{$A\dash \cat{PCMod}$ -- $A$-módulos pseudocompactos, cujos espaços vetoriais subjacentes são objetos de $k\dash\cat{LC}$}%LC: $\prod_I k$.}
+    \item<4->{Estas categorias são \alert{abelianas}, e são duais:
+    $$A\dash \cat{DMod} \xleftrightarrow[\tn{CHom}_k(-,k)]{(-)^* :=} A\dash \cat{PCMod}.$$}
+\end{itemize}
+	\end{frame}
+
+
+    \begin{frame}{O que queremos}
+
+\onslide<1->{Para poder fazer a teoria de Auslander-Reiten, precisamos de uma categoria de módulos}
+\begin{itemize}
+    \item<2->{abeliana,}
+    \item<3->{cujos objetos são completos (prop técnica, mas precisa dela para ter resultados tipo Krull-Schmidt)}
+    \item<4->{fechada por dualidade.}
+\end{itemize}
+	
+\end{frame}
+
+
+\begin{frame}{Solução: primeiro chute}
+
+\onslide<1->{Queremos uma categoria de módulos que contém AMBOS $A\dash \cat{DMod}$ e $A\dash \cat{PCMod}$.  Assim a categoria subjacente de $k$-espaços vetoriais contém ambos discretos $\bigoplus k$ e LCs $\prod k$.  Daqui para frente vamos considerer só os espaços vetoriais.  Esqueça de $A$!}
+
+% \begin{definition}[segunda que vale a pena lembrar]<2->
+%     Um $k$-espaço vetorial topológico $V$ é \alert{localmente linearmente compacto} (LLC) se ele possui um subespaço LC aberto $W$. 
+    
+%     Categoria: $k\dash\cat{LLC}$.
+% \end{definition}
+
+% \begin{itemize}
+%     \item<3->{Discretos $\subset k\dash\cat{LLC}$: pegue $W = 0$,}
+%     \item<4->{$k\dash\cat{LC}\subset k\dash\cat{LLC}$: pegue $W = V$.}
+% \end{itemize}
+
+% \onslide<5->{Objetos de $k\dash\cat{LLC}$ são da forma}
+    
+\end{frame}
+
+
+\begin{frame}{LLC}
+
+\begin{definition}[segunda que vale a pena lembrar]<1->
+    Um $k$-espaço vetorial topológico $V$ é \alert{localmente linearmente compacto} (LLC) se ele possui um subespaço LC aberto $W$. 
+    
+    Categoria: $k\dash\cat{LLC}$.
+\end{definition}
+
+\begin{itemize}
+    \item<2->{$k\dash\cat{Vec}\subset k\dash\cat{LLC}$: pegue $W = 0$,}
+    \item<3->{$k\dash\cat{LC}\subset k\dash\cat{LLC}$: pegue $W = V$.}
+\end{itemize}
+
+\onslide<4->{Objetos de $k\dash\cat{LLC}$ são da forma
+$$V = \left(\bigoplus_X k\right) \oplus \left(\prod_Y k\right)$$
+e assim, aplicando $(-)^*$, temos}
+\onslide<5->{$$V^* = \left(\prod_X k\right) \oplus \left(\bigoplus_Y k\right)\in k\dash\cat{LLC}.$$}
+    
+\end{frame}
+
+
+\begin{frame}{O problema}
+
+\onslide<1->{O problema com essa categoria parece dura:}
+
+\begin{example}<2->
+    \begin{itemize}
+        \item<3->{Considere $V = \prod_{\N}k \in k\dash\cat{LC}$, logo um objeto de $k\dash \cat{LLC}$.}
+        \item<4->{Podemos pegar $V$ e dar para ele a topologia discreta, obtendo $V^{\tn{dis}}\in k\dash\cat{LLC}$.}
+        \item<5->{O mapa
+        \begin{align*}
+            \rho : V^{\tn{dis}} & \to V \\ 
+            x\,\,\, & \mapsto x
+        \end{align*}
+        é contínuo e bijetivo.}
+        \item<6->{Mas não é iso!  Assim 
+        $$V^{\tn{dis}}/\tn{Ker}(\rho) = V^{\tn{dis}}\not\iso V = \tn{Im}(\rho)$$
+        -- o $1^{o}$ teorema de iso falhou: $k\dash \cat{LLC}$ não é abeliana! $\frownie{}$ }
+    \end{itemize}
+      
+\end{example}
+    
+\end{frame}
+
+
+
+	\begin{frame}{Parte 2}
+		
+		\begin{block}
+			{Matemática condensada}
+		\end{block}
+		
+	\end{frame}
+
+
+
+    \begin{frame}{Mesmo problema com $\cat{TAb}$}
+
+\onslide<1->{A categoria dos grupos abelianos topológicos $\cat{TAb}$ tem o mesmo problema: 
+$$\rho : \R^{\tn{dis}} \to \R$$
+é uma bijeção contínua mas não um iso.}
+
+\medskip 
+
+\onslide<2->{Matemática Condensada foi inventada em $\pm 2018$ por Clausen
+e Scholze, e independentemente por Barwick e Haine, para resolver precisamente este problema.}
+
+\medskip 
+
+\onslide<3->{Farei a propaganda primeira, e depois vamos formalizar o que rolou nela!}
+    
+\end{frame}
+
+
+\begin{frame}{Solução mágica: setup}
+
+\begin{itemize}
+    \item<1->{Dado um espaço topológico $C$ e um grupo topológico $G$, seja $\tn{CMap}(C,G)$ o grupo das funções contínuas $C\to G$.}
+    \item<2->{Com $C$ fixo, $(C,-) =\tn{CMap}(C,-)$ é um funtor covariante $\cat{TAb}\to \cat{Ab}$.}
+    \item<3->{Fixe $C\subseteq \R$ assim:
+$$C = \left\{\frac{1}{2}, \frac{1}{3}, \frac{1}{4}, \hdots\right\}\cup\{0\}.$$
+Pode pensar em $C$ como uma ``sequência convergente, junto com seu limite''.}
+\item<4->{Observe que os pontos $\{1/n\}$ são abertos, mas as vizinhanças de $\{0\}$ são enormes: contêm quase todos os pontos de $C$!}
+\item<5->{Vamos aplicar $(C,-)$ para $\rho : \R^{\tn{dis}}\to \R$:}
+\end{itemize}    
+\end{frame}
+
+
+\begin{frame}{Solução mágica}
+
+\begin{enumerate}
+    \item[$(C,\R)$:]<1-> $C$ pode ir para qualquer \alert{sequência convergente} em $\R$ (mandando $0$ pro limite) -- $(C,\R)$ é muito grande.
+    \item[$(C,\R^{\tn{dis}})$:]<2-> dado $\gamma : C\to \R^{\tn{dis}}$, a imagem inversa de $\gamma(0)$ é vizinhança aberta de $0$, logo \emph{cofinito} em $C$.  Temos que mandar quase todos os pontos de $C$ pro mesmo lugar: $(C, \R^{\tn{dis}})$ é \alert{sequências eventualmente constantes} em $\R$ -- $(C,\R^{\tn{dis}})$ é pequeno.
+    \item[$(C,\rho)$:]<3-> $(C,\R^{\tn{dis}})\to (C,\R)$ acaba sendo
+    $$\{\tn{seq ev constantes}\}\hookrightarrow\{\tn{seq convergentes}\}.$$
+    Ou seja, $(C,\rho)$ é injetivo mas tem um conúcleo enorme!  O funtor $(C,-)$ consegue ``ver'' com o conúcleo que o mapa $\rho$ não é iso!
+\end{enumerate}
+
+\medskip 
+
+\onslide<4->{Vamos formalizar o que rolou:}
+\end{frame}
+
+
+
+\begin{frame}{Conjuntos profinitos}
+
+\onslide<1->{Primeira coisa: quem era $C$?}
+
+\begin{definition}[que não se procupe muito]<2->
+    Um \alert{conjunto profinito} é um limite inverso (em $\cat{Top}$) de conjuntos finitos. $\cat{Prof}$ - a categoria deles com mapas contínuos.
+\end{definition}
+
+\begin{example}<3->
+    Seja $C_n = \left\{\frac{1}{2}, \frac{1}{3}, \hdots, \frac{1}{n}\right\}\cup\{0\}.$
+    Quando $n>m$, temos
+    $$\varphi_{mn} :\left\{\frac{1}{2}, \frac{1}{3}, \hdots, \frac{1}{m},\hdots, \frac{1}{n}\right\}\cup\{0\} \to \left\{\frac{1}{2}, \frac{1}{3}, \hdots, \frac{1}{m}\right\}\cup\{0\}$$
+    mandando $1/i$ ($i\leqslant m$) para ele mesmo, e para $0$ caso contrário.  Temos $\invlim C_n = C$, assim $C\in \cat{Prof}$. 
+\end{example}
+
+\end{frame}
+
+
+\begin{frame}{Feixes tradicionais}
+
+\begin{itemize}
+    \item<1->{\alert{Prefeixe} $=$ functor contravariante $T:\bigO(X)\to \cat{Ab}$, com $X$ um espaço topológico.}
+    \item<2->{Dado $U\in \mathcal{O}(X)$ e uma cobertura por abertos $U = \bigcup_{i\in I}U_i$, obtemos
+    $$\xymatrix{T(U) \ar[r]^-{\alpha} & \prod_{i\in I}T(U_i)
+\ar@/_/[rr]_-{\gamma} \ar@/^/[rr]^-{\beta}
+&& \prod_{i,j\in I}T(U_i\cap U_j)}$$}
+(não vou especificar os mapas, mas são ``óbvios'').
+\item<3->{$T$ é um \alert{feixe} se $\alpha$ é o equalizador de $\beta, \gamma$ (para todo aberto $U$ é cobertura de $U$ por abertos).}
+\end{itemize}
+
+\end{frame}
+  
+
+\begin{frame}{Feixes modernos}
+
+\onslide<1->{Grothendieck (menino esperto!) que observou que para fazer sentido de um feixe $T:\mathcal{C}\to \cat{Ab}$, a única coisa que precisa é uma boa analogia de ``cobertura por abertos'' de um objeto.}
+
+\begin{definition}[vaga de propósito!]<2->
+     Um \alert{site} é uma categoria $\mathcal{C}$, junto com uma coleção de ``coberturas'' de cada objeto -- uma cobertura do objeto $c$ sendo uma coleção de morfismos $\{\gamma_i : x_i\to c\}$ satisfazendo propriedades análogas às de coberturas normais.
+\end{definition}
+
+\end{frame}
+
+
+\begin{frame}{Exemplo chave}
+
+\begin{example}<1->
+    $\cat{Prof}$, com coberturas de $X$ sendo coleções finitas de mapas ``juntamente sobrejetivos'': 
+    $$\{f_1 : Y_1\to X\,,\,\hdots\,,\,f_n : Y_n\to X\}$$ 
+    tal que $\bigcup_{i=1}^n\tn{Im}(f_i) = X.$  
+\end{example}
+
+\begin{itemize}
+    \item<2->{Observe que mapas sobrejetivos $Y\onto X$ são coberturas.  Aplicação linda:}
+    \item<3->{$P\in \cat{Prof}$ é \alert{projetivo} se qq mapa $\gamma : Z \twoheadrightarrow 
+    P$ em $\cat{Prof}$ é split.}
+    \item<4->{Projetivos em $\cat{Prof}$ são raros, mas 
+    $$\forall X\in \cat{Prof}, \exists P\hbox{ projetivo com }\gamma : P\onto X.$$}
+    \item<5->{Ou seja, no \emph{site} $\cat{Prof}$, temos coberturas projetivas!}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{A definição principal}
+
+\begin{definition}[Como mini-mentira lá dentro]<2->
+    Um \alert{grupo abeliano condensado} é um feixe $\cat{Prof}\to \cat{Ab}$.  
+    
+    Categoria $\textbf{Cond}(\cat{Ab})$: morfismos as transformações naturais.
+\end{definition}
+
+\medskip 
+
+\onslide<3->{Abrindo a definição, um grupo abeliano condensado acaba sendo um funtor contravariante $T : \cat{Prof}\to \cat{Ab}$ tal que}
+\begin{enumerate}
+        \item<4-> $T(\varnothing) = 0$,
+        
+        \item<5-> $\forall S_1, S_2\in \mathbf{Prof}$, 
+        $$T(S_1\sqcup S_2) = T(S_1)\times T(S_2),$$
+        
+        \item<6-> Dado um mapa sobrejetivo $\rho : S'\onto S$ em $\mathbf{Prof}$, $T(\rho)$ é o equalizador de
+        $$\xymatrix{T(S)\xrightarrow{T(\rho)} T(S')\ar@/^/[rr]\ar@/_/[rr] && T(S'\times_S S')}.$$
+    \end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{Uma mágica}
+
+\onslide<1->{Já que $\cat{Prof}$ tem suficientes projetivos, basta definir um feixe sobre a subcategoria $ \cat{Proj}$ dos profinitos \alert{projetivos} e ele estenderá unicamente para um grupo abeliano condensado.}
+
+\begin{itemize}
+    \item<2->{\underline{Vantagem}: definido nos projetivos, Condição 3 segue de 1 e 2! Ou seja, um grupo abeliano condensado é $T : \cat{Proj}\to \cat{Ab}$ tal que $T(\varnothing) = 0$ e $T(S_1\sqcup S_2) = T(S_1)\times T(S_2)$.}
+    \item<3->{\underline{Desvantagem}: a categoria $\cat{Proj}$ é muito frágil: por exemplo, o produto $P\times Q$ de projetivos é quase nunca projetivo!}
+\end{itemize}
+
+\end{frame}
+\begin{frame}{O ponto desse tudo}
+
+\begin{theorem}[Clausen-Scholze]
+   \onslide<2->{ Seja $\cat{CGAb}$ a categoria dos grupos abelianos topológicos compactamente gerados (classe MUITO grande!).  }
+    \begin{itemize}
+        \item<3-> Dado $G\in \cat{CGAb}$, o prefeixe 
+    $$\underline{G} = \tn{CMap}(-,G) : \cat{Prof}\to \cat{Ab}$$
+    é um grupo abeliano condensado.
+    \item<4-> O funtor $\cat{CGAb}\to \cat{Cond}(\cat{Ab})$ dado por $G\mapsto \underline{G}$ é plenamente fiel!
+    \item<5-> A categoria $\cat{Cond}(\cat{Ab})$ é abeliana!
+    \item<6-> Ou seja, mergulhamos nossa categoria de objetos topológicos, da melhor forma possível, dentro de uma categoria abeliana!
+    \end{itemize}
+\end{theorem}
+
+\end{frame}
+
+
+\begin{frame}{Um ponto técnico}
+
+\onslide<1->{Eu disse no início que é bom ter objetos \emph{completos}.}
+
+\medskip 
+
+\onslide<2->{Os objetos de $\cat{Cond}(\cat{Ab})$ não são completos, em geral.}
+
+\medskip 
+
+\onslide<3->{Mas existe um funtor de ``completamento'' de $\cat{Cond}(\cat{Ab})$ para grupos abelianos condensados completos (eles se chamam de ``\alert{sólidos}'').}
+
+\medskip 
+
+\onslide<4->{A categoria dos sólidos é abeliana também, e (seguindo Clausen) é onde a teoria rica acontece.}
+
+\end{frame}
+
+
+
+	\begin{frame}{Parte 3}
+		
+		\begin{block}
+			{Trabalho novo}
+		\end{block}
+		
+	\end{frame}
+
+
+
+\begin{frame}{Lembrete}
+
+\onslide<1->{Sendo $k$ um corpo, estamos em busca de uma categoria de $k$-espaços vetoriais topológicos com as seguintes propriedades:}
+
+\begin{itemize}
+    \item<2-> Contém $k\dash\cat{LLC}$ (que lembre-se não é abeliana)
+    \item<3-> É abeliana
+    \item<4-> Tem objetos completos
+    \item<5-> É fechada por dualidade
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Primeira tentativa}
+
+\onslide<2->{Trabalhar na categoria dos $k$-espaços vetoriais condensados: feixes
+    $$\textbf{Prof}\to k\dash\textbf{Vec}.$$
+Formalmente, faz sentido.}
+
+\medskip
+
+\onslide<3->{Problema: a categoria \alert{sólida} de tais feixes é abeliana SOMENTE quando $k$ é uma extensão finita do corpo base ($\Q$ ou $\F_p$).}
+
+\medskip 
+
+\onslide<4->{Em particular, não podemos pegar $k = \overline{k}$.}
+
+\medskip 
+
+\onslide<5->{Parece ruim.  Na minha visão, o problema é que $\cat{Prof}$ consegue ver limites inversos, mas a complexidade de corpos vem de limites diretos ($\overline{k}$ é a \emph{união} das subextensões finitas de $k$).}
+
+\end{frame}
+
+
+\begin{frame}{O que fizemos}
+
+\onslide<1->{Nossa solução foi para colocar esta complexidade DENTRO do domínio.  Assim:}
+\onslide<2->{Trocamos 
+$$\{\hbox{conjuntos profinitos}\} \hbox{ por } \{k\hbox{-espaços vetoriais profinitos}\}!$$}
+\onslide<3->{Mas lembre-se que a categoria dos limites inversos de $k$-espaços de dimensão finita é $k\dash\cat{LC}$.  Assim:}
+
+\end{frame}
+
+
+\begin{frame}{Definição Principal}
+
+
+\begin{definition}[a mais importante da palestra, com mini-mentira]<1->
+    Um \emph{$k$-espaço vetorial linearmente condensado} é um feixe 
+    $$\hbox{$k\dash\textbf{LC}\to k\dash\textbf{Vec}.$}$$
+    A categoria deles, com mapas sendo TLs, é $\textbf{LCond}(k\dash\textbf{Vec})$.
+\end{definition}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Abeliana}
+
+\onslide<1->{A primeira coisa que a gente quería era uma categoria abeliana que contém $k\dash\cat{LLC}$.}
+
+\begin{theorem}[M-Rickard-Souza]
+    \begin{itemize}
+        \item<2-> Dado um $k$-espaço vetorial topológico $V$, o funtor 
+        $$\underline{V} = \tn{CHom}_k(-,V)$$ 
+        é um objeto de $\textbf{LCond}(k\hbox{-}\textbf{Vec})$.
+        \item<3-> O funtor $k$-$\textbf{LLC}\to \hbox{$\textbf{LCond}(k\hbox{-}\textbf{Vec})$}$ dado por $V\mapsto \underline{V}$ é plenamente fiel.
+        \item<4-> A categoria $\textbf{LCond}(k\hbox{-}\textbf{Vec})$ é abeliana!
+    \end{itemize}
+\end{theorem}
+
+\end{frame}
+
+
+\begin{frame}{Objetos completos}
+
+\onslide<1->{Lembre-se que a categoria $\cat{Prof}$ tem suficientes projetivos, que ajuda para simplificar as definições, mas que a categoria dos projetivos era complicada.  Com condensada \emph{linear}, a situação é melhor:}
+
+\begin{theorem}[M-Rickard-Souza]
+    \begin{itemize}
+        \item<2-> \emph{Todo} objeto de $k$-$\textbf{LC}$ é projetivo $\hdots$ 
+        \item<3-> $\hdots$ assim $\textbf{LCond}(k\hbox{-}\textbf{Vec})$ acaba sendo a mesma coisa como funtores contravariantes aditivos 
+        $$\hbox{$k$-$\textbf{LC}\to k\hbox{-}\textbf{Vec}$!}$$
+        \item<4-> Segue também que todo objeto $T\in \textbf{LCond}(k\hbox{-}\textbf{Vec})$ é sólido (= completo)!
+    \end{itemize}
+\end{theorem}
+
+\end{frame}
+
+
+\begin{frame}{Fechada por dualidade}
+
+\onslide<1->{A última propriedade que a gente queria era uma dualidade.  Tem um funtor, mas para mim ela ainda é misteriosa:}
+
+\begin{theorem}[M-Rickard-Souza]
+    \begin{itemize}
+        \item<2-> Existe um endofuntor $$(-)^{*} : \textbf{LCond}(k\hbox{-}\textbf{Vec})\to \textbf{LCond}(k\hbox{-}\textbf{Vec})$$ que estende a dualidade em $k$-$\textbf{LLC}$.
+        \item<3-> Na subcategoria $k$-$\textbf{LLC}$, é perfeito: $\underline{V}^{**}\iso \underline{V}$.
+        \item<4-> Mas existem $F\in \textbf{LCond}(k\hbox{-}\textbf{Vec})$ com $F\neq 0$ e $F^* = 0$.
+    \end{itemize}
+\end{theorem}
+
+\onslide<5->{Ainda veremos as consequências desse mistério quando começarmos de aplicar a teoria para representações!}
+    
+\end{frame}
+
+
+
+
+
+
+
+
+\begin{frame}{}
+	
+	\center{Obrigado!}
+	
+\end{frame}
+
+
+\end{document}

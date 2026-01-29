@@ -1,0 +1,655 @@
+\documentclass[]{beamer}
+%
+% Choose how your presentation looks.
+%
+\mode<presentation>
+{
+	\usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+	\usecolortheme{default} % or try albatross, beaver, crane, ...
+	\usefonttheme{default}  % or try serif, structurebold, ...
+	\setbeamertemplate{navigation symbols}{}
+	\setbeamertemplate{caption}[numbered]
+} 
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+
+\usepackage[all]{xy}
+\usepackage{ stmaryrd }
+
+\usepackage{pb-diagram}
+\usepackage{graphics}
+%\usepackage[all,cmtip]{xy}
+\usepackage{tikz-cd}
+\usepackage{tikz-qtree}
+\usepackage{forest}
+\usetikzlibrary{shapes.geometric,backgrounds}
+\usepackage{pgf,tikz,pgfplots}\pgfplotsset{compat=1.14}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usetikzlibrary{arrows}
+\usepackage{MnSymbol,wasysym}
+
+% \usepackage{mathabx}
+% \usepackage{lscape}
+% \usepackage{geometry}
+
+\DeclareSymbolFont{AMSb}{U}{msb}{m}{n}
+\DeclareMathSymbol{\N}{\mathbin}{AMSb}{"4E}
+\DeclareMathSymbol{\Z}{\mathbin}{AMSb}{"5A}
+\DeclareMathSymbol{\R}{\mathbin}{AMSb}{"52}
+\DeclareMathSymbol{\Q}{\mathbin}{AMSb}{"51}
+\DeclareMathSymbol{\I}{\mathbin}{AMSb}{"49}
+\DeclareMathSymbol{\C}{\mathbin}{AMSb}{"43}
+
+\newcommand{\dbl}{[\hspace{-0.2ex}[}
+\newcommand{\dbr}{]\hspace{-0.2ex}]}
+\newcommand{\db}[1]{\dbl {#1} \dbr}
+\newcommand{\res}[1]{\hspace{-0.6mm}\downarrow_{\hspace{-0.25mm}{#1}}}
+\newcommand{\ind}[1]{\hspace{-0.6mm}\uparrow^{\hspace{-0.25mm}{#1}}}
+\newcommand{\ctens}{\widehat{\otimes}}
+\newcommand{\prf}{\noindent\textbf{Proof}}
+\newcommand{\iso}{\cong}
+\newcommand{\invlim}{\underleftarrow{\textnormal{lim}}\,}
+\newcommand{\dirlim}{\underrightarrow{\textnormal{lim}}\,}
+\newcommand{\ds}{\raisebox{0.5pt}{\,\big|\,}}
+\newcommand{\onto}{\twoheadrightarrow}
+\newcommand{\incl}{\hookrightarrow}
+\newcommand{\id}{\textnormal{id}}
+\newcommand{\invim}[1]{{#1}^{\leftarrow}}
+\newcommand{\Hom}{\textnormal{Hom}}
+\newcommand{\X}{\mathfrak{X}}
+\newcommand{\Y}{\mathfrak{Y}}
+\newcommand{\norm}[1]{\textnormal{N}_{#1}}
+\newcommand{\End}{\textnormal{End}}
+\newcommand{\dbls}{(\hspace{-0.2ex}(}
+\newcommand{\dbrs}{)\hspace{-0.2ex})}
+\newcommand{\dbs}[1]{\dbls {#1} \dbrs}
+\newcommand{\rad}{\textnormal{rad}}
+\newcommand{\vertex}[1]{Q_{(#1)}}
+\newcommand{\GL}{\textnormal{GL}}
+\newcommand{\SL}{\textnormal{SL}}
+\newcommand{\dash}{\textnormal{-}}
+\newcommand{\tn}[1]{\textnormal{#1}}
+\newcommand{\cat}[1]{\tn{\textbf{#1}}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\bigO}{\mathcal{O}}
+%\newcommand{\deg}{\textnormal{SL}}
+
+\newcommand{\xonto}[2][]{%
+	\xrightarrow[#1]{#2}\mathrel{\mkern-14mu}\rightarrow
+}
+
+
+% Symbols and macros unchanged
+
+\title{Condensed vector spaces}
+\author{John MacQuarrie, UFMG}
+\institute{}
+\date{Dedicated to Said Sidki on the occasion of his 85th birthday.\\  Happy Birthday, Said!!!}
+
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\section{Plan}
+
+\begin{frame}{Talk outline}
+		
+\begin{enumerate}
+	\item Motivation and the main problem
+    \item Condensed mathematics
+    \item New work
+\end{enumerate}
+		
+\bigskip
+		
+Joint work with Lucas Henrique de Souza (UFMG) and Jeremy Rickard (University of Bristol)
+		
+\bigskip
+		
+\small{Work partially supported by CNPq and FAPEMIG universal grants, a CNPq productivity grant, and a PDJ grant (for Lucas) jointly funded by FAPEMIG and CNPq}
+		
+\end{frame}
+
+\begin{frame}{Part 1}
+\begin{block}{Motivation and the main problem}
+\end{block}
+\end{frame}
+
+\begin{frame}{Motivation: representations of pseudocompact algebras}
+		
+\onslide<1->{This project arose from the representation theory of pseudocompact algebras.}
+		
+\medskip 
+		
+\onslide<2->{If $k$ is a field, a pseudocompact $k$-algebra is an inverse limit of finite-dimensional associative, unital $k$-algebras.}
+		
+\bigskip 
+		
+\onslide<3->{For example, if $G = \invlim G/N$ is a profinite group, the completed group algebra
+$$k\db{G} = \invlim k[G/N]$$
+is a pseudocompact algebra.}
+
+\bigskip 
+
+\onslide<4->{But actually this talk is about the underlying $k$-vector spaces, so we don't need to know anything about pseudocompact algebras in this talk
+(except a few slides of motivation at the start).}
+\end{frame}
+
+
+
+\begin{frame}{Auslander--Reiten theory}
+		
+\onslide<1->{Let $k$ be a field and $A$ a finite-dimensional associative algebra.  
+We want to understand the category of finite-dimensional $A$-modules.}
+		
+\medskip 
+		
+\onslide<2->{\alert{Auslander--Reiten theory} gives us an approach so powerful that it has no right to exist.}
+		
+\bigskip 
+		
+\onslide<3->{We study exact sequences of $A$-modules
+$$0\to V\to U \to W\to 0$$
+with $W$ indecomposable.}
+\onslide<4->{If $W$ is projective, the sequence splits, which isn't so interesting.}
+\end{frame}
+
+\begin{frame}{Auslander--Reiten theory}
+		
+\onslide<1->{But for \alert{any} non-projective indecomposable $W$, there \alert{exists}(!) a \alert{unique}(!) ``almost split'' exact sequence (which I won't define):}
+
+\onslide<2->{$$0\to \tau(W)\to U\to W\to 0.$$}
+\onslide<3->{And $\tau(W)$ is also indecomposable!}
+		
+\bigskip 
+		
+\onslide<4->{So Auslander--Reiten theory relates almost all the indecomposable modules amongst each other.  
+These relations are \emph{fundamental} in modern representation theory.}
+        
+\end{frame}
+
+
+\begin{frame}{Why am I talking about this?}
+		
+\onslide<1->{Given $W$, there is an explicit construction of $\tau(W)$.  
+I won’t give the details, but it looks something like this:}
+\onslide<2->{$$\xymatrix{W\ar@{|->}[r]
+ & \textnormal{something}(W) \ar@{|->}[r]
+ & \tau(W) = \textnormal{something}(W)^*}$$}
+\onslide<3->{where $U^* = \tn{Hom}_k(U,k)$ is the \emph{dual} $A$-module.}
+		
+\bigskip 
+		
+\onslide<4->{So to do AR-theory, it's very important that we can \alert{dualize} finite-dimensional $A$-modules!}
+\end{frame}
+
+
+
+\begin{frame}{My algebras}
+
+\onslide<1->{We will work with topological $k$-vector spaces, but the field $k$ itself will always be \alert{discrete}!}
+
+\begin{definition}[first definition worth remembering]<2->
+A topological $k$-vector space $V$ is \alert{linearly compact} (LC) if
+$$V = \prod_I k$$
+with the product topology.  
+Category: $k\dash\cat{LC}$.
+
+\medskip 
+
+Objects of $k\dash\cat{LC}$ are precisely inverse limits of finite-dimensional $k$-vector spaces.
+\end{definition}
+
+\medskip 
+		
+\onslide<3->{The underlying vector space of a pseudocompact $k$-algebra is LC.}
+
+\end{frame}
+
+
+
+\iffalse
+\begin{frame}{Sales pitch for topological vector spaces}
+
+\begin{itemize}
+\item<2->{In $k\dash\cat{Vec}$, when $V$ is finite-dimensional, we have $V^{**}\iso V$, and this is extremely useful.}
+\item<3->{But if $\textcolor{blue}{V} = \bigoplus_I k$ with $|I|=\infty$, then $V < V^* < V^{**}$.  
+The double dual is \emph{much} larger than $V$. Annoying.}
+\item<4->{Let’s redo the computation using \alert{topological} vector spaces.  
+Now $\tn{Hom}_k$ means \alert{continuous} homomorphisms!}
+\item<5->{For the same $\textcolor{blue}{V}$, we get $\textcolor{blue}{V}^* = \prod_I k$, an object of $k\dash\cat{LC}$.}
+\item<6->{The magic is that with the product topology,
+$$\textcolor{blue}{V}^{**} = \tn{Hom}_k(\prod_I k, k) \iso \textcolor{blue}{V}.$$}
+\item<7->{So $\textcolor{blue}{V}^{**}\iso \textcolor{blue}{V}$, as it should be!  
+More precisely, the categories $k\dash\cat{Vec}$ and $k\dash\cat{LC}$ are dual.}
+\end{itemize}
+
+\end{frame}
+\fi
+
+
+\begin{frame}{Modules}
+
+\onslide<1->{A pseudocompact algebra has two well-behaved categories of topological modules:}
+
+\begin{itemize}
+\item<2->{$A\dash\cat{DMod}$ — discrete $A$-modules, whose underlying vector spaces are discrete (so just normal vector spaces: $k\dash\cat{Vec}$).}
+\item<3->{$A\dash\cat{PCMod}$ — pseudocompact $A$-modules, whose underlying vector spaces are in $k\dash\cat{LC}$.}
+\item<4->{These categories are \alert{abelian}, and they are dual.  At the level of vector spaces
+$$\Big(\bigoplus_I k\Big)^* = \prod_I k\hbox{ and }\Big(\prod_I k\Big)^* = \bigoplus_I k.$$
+
+}
+\end{itemize}
+
+
+
+\end{frame}
+
+\begin{frame}{What we want}
+
+\onslide<1->{To develop Auslander--Reiten theory, we need a category of modules that is}
+\begin{itemize}
+\item<2->{abelian,}
+\item<3->{with complete objects (a technical condition, but needed for results like Krull--Schmidt),}
+\item<4->{and closed under duality.}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Solution: first attempt}
+
+\onslide<1->{We want a category containing \emph{both} $A\dash \cat{DMod}$ and $A\dash \cat{PCMod}$.  
+
+\medskip 
+
+So the underlying category of $k$-vector spaces contains both discrete spaces $\bigoplus k$ and LC spaces $\prod k$.  
+
+\medskip 
+
+From now on we consider only vector spaces.  Forget about $A$!}
+
+\end{frame}
+
+
+\begin{frame}{LLC}
+
+\begin{definition}[second worth remembering]<1->
+A topological $k$-vector space $V$ is \alert{locally linearly compact} (LLC) if it has an open LC subspace $W$.
+
+\medskip 
+
+Category: $k\dash\cat{LLC}$.
+\end{definition}
+
+\begin{itemize}
+\item<2->{$k\dash\cat{Vec}\subset k\dash\cat{LLC}$: take $W = 0$,}
+\item<3->{$k\dash\cat{LC}\subset k\dash\cat{LLC}$: take $W = V$.}
+\end{itemize}
+
+\onslide<4->{Objects of $k\dash\cat{LLC}$ are of the form
+$$V = \left(\bigoplus_X k\right) \oplus \left(\prod_Y k\right),$$
+and thus, applying $(-)^*$, we get}
+\onslide<5->{$$V^* = \left(\prod_X k\right) \oplus \left(\bigoplus_Y k\right)\in k\dash\cat{LLC}.$$}
+
+\end{frame}
+
+
+\begin{frame}{But $k$-LLC has a serious problem}
+
+
+\begin{example}<1->
+\begin{itemize}
+\item<2->{Consider $V = \prod_{\N} k \in k\dash\cat{LLC}$.}
+\item<3->{We can also give $V$ the discrete topology, to get $V^{\tn{dis}}\in k\dash\cat{LLC}$.}
+\item<4->{The map
+\begin{align*}
+\rho : V^{\tn{dis}} & \to V \\ 
+x\,\,\, & \mapsto x
+\end{align*}
+is continuous and bijective,}
+\item<5->{but not an isomorphism!  So
+$$V^{\tn{dis}}/\tn{Ker}(\rho) = V^{\tn{dis}}\not\iso V = \tn{Im}(\rho)$$
+—the first iso theorem fails: $k\dash\cat{LLC}$ is not abelian! $\frownie{}$}
+\end{itemize}
+\end{example}
+
+\end{frame}
+
+
+
+\begin{frame}{Part 2}
+		
+\begin{block}
+{Condensed mathematics}
+\end{block}
+		
+\end{frame}
+
+
+
+\begin{frame}{The same problem for $\cat{TAb}$}
+
+\onslide<1->{The category of topological abelian groups $\cat{TAb}$ has the same problem:
+$$\rho : \R^{\tn{dis}} \to \R$$
+is a continuous bijection but not an isomorphism.}
+
+\bigskip 
+
+\onslide<2->{Condensed Mathematics was invented around 2018 by Clausen
+and Scholze, and independently by Barwick and Haine, to solve just this sort of problem.}
+
+\bigskip 
+
+\onslide<3->{I'll try and give the intuition, then we'll formalize what's going on!}
+    
+\end{frame}
+
+
+\begin{frame}{Magic solution: setup}
+
+\begin{itemize}
+\item<1->{Given a topological space $C$ and a topological group $G$, let $\tn{CMap}(C,G)$ denote the group of continuous functions $C\to G$.}
+\item<2->{With $C$ fixed, $(C,-)=\tn{CMap}(C,-)$ is a covariant functor $\cat{TAb}\to \cat{Ab}$.}
+\item<3->{Fix $C\subseteq \R$ as follows:
+$$C = \left\{\frac{1}{2}, \frac{1}{3}, \frac{1}{4}, \hdots\right\}\cup\{0\}.$$
+We think of $C$ as a ``convergent sequence, with its limit''.}
+\item<4->{Observe that the points $\{1/n\}$ are open, but neighbourhoods of $\{0\}$ are huge: they contain almost every point of $C$!}
+\item<5->{Let's apply $(C,-)$ to $\rho : \R^{\tn{dis}}\to \R$:}
+\end{itemize}    
+\end{frame}
+
+
+\begin{frame}{Magic solution}
+
+\begin{enumerate}
+\item[$(C,\R)$:]<1-> $C$ can map to any \alert{convergent sequence} in $\R$ (sending $0$ to the limit) — $(C,\R)$ is very large.
+\item[$(C,\R^{\tn{dis}})$:]<2-> Given $\gamma : C\to \R^{\tn{dis}}$, $\gamma^{-1}(\gamma(0))$ is an open neighborhood of $0$, so \emph{cofinite} in $C$.  
+Thus almost every point of $C$ must be sent to the same value: $(C,\R^{\tn{dis}})$ consists of \alert{eventually constant sequences} in $\R$ — $(C,\R^{\tn{dis}})$ is small.
+\item[$(C,\rho)$:]<3-> the induced map $(C,\R^{\tn{dis}})\to (C,\R)$ is
+$$\{\tn{eventually constant sequences}\}\hookrightarrow\{\tn{convergent sequences}\}.$$
+So $(C,\rho)$ is injective, but has a huge cokernel!  
+The functor $(C,-)$ can ``see'', via the cokernel, that $\rho$ is not an isomorphism!
+\end{enumerate}
+
+\medskip 
+
+\onslide<4->{Let's formalize what just happened:}
+\end{frame}
+
+
+
+\begin{frame}{Profinite sets}
+
+\onslide<1->{First question: what was $C$?}
+
+\begin{definition}<2->
+A \alert{profinite set} is an inverse limit (in $\cat{Top}$) of finite sets.  
+Let $\cat{Prof}$ denote their category, with continuous maps.
+\end{definition}
+
+\begin{example}<3->
+Let 
+$$C_n = \left\{\frac{1}{2}, \frac{1}{3}, \hdots, \frac{1}{n}\right\}\cup\{0\}.$$
+For $n>m$, define
+$$\varphi_{mn} :
+\left\{\frac{1}{2}, \frac{1}{3}, \hdots, \frac{1}{m},\hdots, \frac{1}{n}\right\}\cup\{0\}
+\to
+\left\{\frac{1}{2}, \frac{1}{3}, \hdots, \frac{1}{m}\right\}\cup\{0\}$$
+by sending $1/i$ ($i\leq m$) to itself, and all other points to $0$.  
+Then $\invlim C_n = C$, so $C\in \cat{Prof}$. 
+\end{example}
+
+\end{frame}
+
+
+\begin{frame}{Classical sheaves}
+
+\begin{itemize}
+\item<1->{A \alert{presheaf} is a contravariant functor $T:\bigO(X)\to \cat{Ab}$, where $X$ is a topological space.}
+\item<2->{Given $U\in \mathcal{O}(X)$ and an open cover $U=\bigcup_{i\in I}U_i$, we obtain
+$$\xymatrix{T(U) \ar[r]^-{\alpha} & \prod_{i\in I}T(U_i)
+\ar@/_/[rr]_-{\gamma} \ar@/^/[rr]^-{\beta}
+&& \prod_{i,j\in I}T(U_i\cap U_j)}$$}
+(I won’t specify the maps; they are ``obvious''. )
+\item<3->{$T$ is a \alert{sheaf} if $\alpha$ is the equalizer of $\beta$ and $\gamma$ (for every open $U$ and every open cover of $U$).}
+\end{itemize}
+
+\end{frame}
+  
+
+\begin{frame}{Modern sheaves}
+
+\onslide<1->{Grothendieck (smart kid!) observed that, in order to make sense of a sheaf $T:\mathcal{C}\to \cat{Ab}$, all we need is a good analogue of ``open covers'' of an object.}
+
+\begin{definition}[deliberately vague!]<2->
+A \alert{site} is a category $\mathcal{C}$ together with a collection of ``covers'' of each object — a cover of an object $c$ being a collection of morphisms $\{\gamma_i : x_i\to c\}$ satisfying axioms analogous to those of ordinary open covers.
+\end{definition}
+
+\end{frame}
+
+
+\begin{frame}{Key example}
+
+\begin{example}<1->
+$\cat{Prof}$, with covers of $X$ given by finite collections of ``jointly surjective'' maps: that is, 
+$$\{f_1 : Y_1\to X,\ldots,f_n : Y_n\to X\}$$
+such that $\bigcup_{i=1}^n \tn{Im}(f_i)=X$.
+\end{example}
+
+\begin{itemize}
+\item<2->{Observe that surjective maps $Y\onto X$ are covers.  Here's a beautiful application of this:}
+\item<3->{$P\in \cat{Prof}$ is \alert{projective} if every surjection $\gamma : Z\twoheadrightarrow P$ in $\cat{Prof}$ splits.}
+\item<4->{Projectives in $\cat{Prof}$ are rare, but
+$$\forall X\in \cat{Prof},\ \exists P\ \text{projective with }\gamma : P\onto X.$$}
+\item<5->{That is, in the \emph{site} $\cat{Prof}$, we have projective covers!}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{The main definition}
+
+\begin{definition}[containing a small lie]<2->
+A \alert{condensed abelian group} is a sheaf $\cat{Prof}\to \cat{Ab}$.
+
+The category $\textbf{Cond}(\cat{Ab})$ has morphisms given by natural transformations.
+\end{definition}
+
+\medskip 
+
+\onslide<3->{Unpacking the definition, a condensed abelian group is a contravariant functor $T:\cat{Prof}\to \cat{Ab}$ such that}
+\begin{enumerate}
+\item<4-> $T(\varnothing)=0$,
+\item<5-> for all $S_1,S_2\in \mathbf{Prof}$,
+$$T(S_1\sqcup S_2)=T(S_1)\times T(S_2),$$
+\item<6-> given a surjection $\rho:S'\onto S$ in $\mathbf{Prof}$, $T(\rho)$ is the equalizer of
+$$\xymatrix{T(S)\xrightarrow{T(\rho)}T(S')\ar@/^/[rr]\ar@/_/[rr]&&T(S'\times_S S').}$$
+\end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{A bit of magic}
+
+\onslide<1->{Since $\cat{Prof}$ has enough projectives, it suffices to define a sheaf on the subcategory $\cat{Proj}$ of \alert{projective} profinite sets, and it extends uniquely to a condensed abelian group.}
+
+\begin{itemize}
+\item<2->{\underline{Advantage}: when defined on projectives, Condition~3 follows from Conditions~1 and~2!  
+That is, a condensed abelian group is a functor $T:\cat{Proj}\to \cat{Ab}$ such that $T(\varnothing)=0$ and $T(S_1\sqcup S_2)=T(S_1)\times T(S_2)$.}
+\item<3->{\underline{Disadvantage}: the category $\cat{Proj}$ is very fragile; for example, the product $P\times Q$ of projectives is almost never projective!}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{The point of all this}
+
+\begin{theorem}[Clausen--Scholze]
+\onslide<2->{Let $\cat{CGAb}$ be the category of compactly generated topological abelian groups (a \emph{very} large class!).}
+\begin{itemize}
+\item<3-> Given $G\in \cat{CGAb}$, the presheaf
+$$\underline{G}=\tn{CMap}(-,G):\cat{Prof}\to \cat{Ab}$$
+is a condensed abelian group.
+\item<4-> The functor $\cat{CGAb}\to \cat{Cond}(\cat{Ab})$ given by $G\mapsto \underline{G}$ is fully faithful!
+\item<5-> The category $\cat{Cond}(\cat{Ab})$ is abelian!
+\item<6-> In other words, we've embedded our category of topological objects, in the best possible way, into an abelian category!
+\end{itemize}
+\end{theorem}
+
+\end{frame}
+
+
+\begin{frame}{A technical point}
+
+\onslide<1->{I said at the beginning that it is important to have \emph{complete} objects.}
+
+\bigskip 
+
+\onslide<2->{Objects of $\cat{Cond}(\cat{Ab})$ are not complete in general.}
+
+\bigskip 
+
+\onslide<3->{However, there's a ``completion'' functor from $\cat{Cond}(\cat{Ab})$ to complete condensed abelian groups (they call them ``\alert{solid}'').}
+
+\bigskip 
+
+\onslide<4->{The category of solid objects is also abelian, and (following Clausen) this is where the rich theory really happens.}
+
+\end{frame}
+
+
+\begin{frame}{Part 3}
+		
+\begin{block}
+{New work}
+\end{block}
+		
+\end{frame}
+
+
+
+\begin{frame}{Reminder}
+
+\onslide<1->{Let $k$ be a field. We are looking for a category of topological $k$-vector spaces with the following properties:}
+
+\begin{itemize}
+\item<2-> It contains $k\dash\cat{LLC}$ (which, recall, is not abelian);
+\item<3-> It is abelian;
+\item<4-> It has complete objects;
+\item<5-> It is closed under duality.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{First attempt}
+
+\onslide<2->{Work in the category of condensed $k$-vector spaces: sheaves
+$$\textbf{Prof}\to k\dash\textbf{Vec}.$$
+Formally, this makes sense.}
+
+\medskip
+
+\onslide<3->{Problem: the \alert{solid} category of such sheaves is abelian \emph{only} when $k$ is a finite extension of the base field ($\Q$ or $\F_p$).}
+
+\medskip 
+
+\onslide<4->{In particular, we cannot take $k=\overline{k}$.}
+
+\medskip 
+
+\onslide<5->{This looks bad. In my view, the issue is that $\cat{Prof}$ can see inverse limits, but the complexity of fields comes from direct limits ($\overline{k}$ is the \emph{union} of the finite subextensions of $k$).}
+
+\end{frame}
+
+
+\begin{frame}{What we did}
+
+\onslide<1->{Our solution was to put this complexity \emph{inside} the domain.  Namely:}
+\onslide<2->{We replaced
+$$\{\text{profinite sets}\}\ \text{by}\ \{\text{profinite }k\dash\text{vector spaces}\}!$$}
+\onslide<3->{But recall that the category of inverse limits of finite-dimensional $k$-vector spaces is $k\dash\cat{LC}$.  Thus:}
+
+\end{frame}
+
+
+\begin{frame}{Main definition}
+
+\begin{definition}[main one of the talk, with a small lie]<1->
+A \emph{linearly condensed $k$-vector space} is a sheaf
+$$k\dash\textbf{LC}\to k\dash\textbf{Vec}.$$
+Their category, with morphisms given by natural transformations, is
+$\textbf{LCond}(k\dash\textbf{Vec})$.
+\end{definition}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Abelian}
+
+\onslide<1->{The first thing we wanted was an abelian category containing $k\dash\cat{LLC}$.}
+
+\begin{theorem}[M--Rickard--Souza]
+\begin{itemize}
+\item<2-> Given a topological $k$-vector space $V$, the functor
+$$\underline{V}=\tn{CHom}_k(-,V)$$
+is an object of $\textbf{LCond}(k\hbox{-}\textbf{Vec})$.
+\item<3-> The functor $k$-$\textbf{LLC}\to \textbf{LCond}(k\hbox{-}\textbf{Vec})$ given by $V\mapsto \underline{V}$ is fully faithful.
+\item<4-> The category $\textbf{LCond}(k\hbox{-}\textbf{Vec})$ is abelian!
+\end{itemize}
+\end{theorem}
+
+\end{frame}
+
+
+\begin{frame}{Complete objects}
+
+\onslide<1->{Recall that the category $\cat{Prof}$ has enough projectives, which helps simplify definitions, but the category of projectives was complicated.  With \emph{linear} condensed objects, the situation is better:}
+
+\begin{theorem}[M--Rickard--Souza]
+\begin{itemize}
+\item<2-> \emph{Every} object of $k$-$\textbf{LC}$ is projective $\hdots$
+\item<3-> $\hdots$ hence $\textbf{LCond}(k\hbox{-}\textbf{Vec})$ is equivalent to the category of additive contravariant functors
+$$k\hbox{-}\textbf{LC}\to k\hbox{-}\textbf{Vec}!$$
+\item<4-> It also follows that every object $T\in \textbf{LCond}(k\hbox{-}\textbf{Vec})$ is solid (= complete)!
+\end{itemize}
+\end{theorem}
+
+\end{frame}
+
+
+\begin{frame}{Closed under duality}
+
+\onslide<1->{The last property we wanted was a duality.  There is such a functor, but to me it is still mysterious:}
+
+\begin{theorem}[M--Rickard--Souza]
+\begin{itemize}
+\item<2-> There exists an endofunctor
+$$(-)^*:\textbf{LCond}(k\hbox{-}\textbf{Vec})\to \textbf{LCond}(k\hbox{-}\textbf{Vec})$$
+extending the duality on $k$-$\textbf{LLC}$.
+\item<3-> On the subcategory $k$-$\textbf{LLC}$ it is perfect: $\underline{V}^{**}\iso \underline{V}$.
+\item<4-> But there exists $F\in \textbf{LCond}(k\hbox{-}\textbf{Vec})$ with $F\neq 0$ and $F^*=0$.
+\end{itemize}
+\end{theorem}
+
+\onslide<5->{We will see the consequences of this mystery when we start applying the theory to representations!}
+    
+\end{frame}
+
+
+
+
+% (Translation continues exactly through the rest of the document…)
+
+\begin{frame}{}
+\center{Thank you!}
+\end{frame}
+
+\end{document}
