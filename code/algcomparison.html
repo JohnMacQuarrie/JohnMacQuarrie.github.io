@@ -229,123 +229,77 @@
  <p>
    
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Formatted Code</title>
-  <style>
-    body {
-      font-family: monospace;
-      background-color: #f7f7f7;
-    }
-    pre {
-      background: #ffffff;
-      padding: 1em;
-      border: 1px solid #ccc;
-      overflow-x: auto;
-      line-height: 1.4;
-    }
-  </style>
-</head>
-<body>
-
-<pre><code>
-#GAP FUNCTIONS CALLED IN SAGE    
-Indeterminate = libgap.eval("I:=function(x,y) return Indeterminate(x,y); end;");
-StringFormatted = libgap.eval("S:=function(x,y,z,w) return StringFormatted(x,y,z,w);end;");
-StF = libgap.eval("St:=function(x,y,z) return StringFormatted(x,y,z);end;");
-VectorSpace = libgap.eval("V:=function(x,y,z) return VectorSpace(x,y,z);end;");
-Cyclesmap = libgap.eval(
-"Cyclesmap:=function(Source,Range,cycle)local Im,i,f,D;
- D:=GeneratorsOfVectorSpace(Source);
- Im:=[];
- for i in [1..Length(cycle)] do
-   Add(Im, LinearCombination(Basis(Range), cycle[i][1]));
- od;
- f:=LeftModuleGeneralMappingByImages(Source, Range, D, Im);
- return f;
- end;"
-);
-
+<pre><code class="language-python">
+Indeterminate = libgap.eval("I:=function(x,y) return Indeterminate(x,y); end;")
+StringFormatted = libgap.eval("S:=function(x,y,z,w) return StringFormatted(x,y,z,w);end;")
+StF = libgap.eval("St:=function(x,y,z) return StringFormatted(x,y,z);end;")
+VectorSpace = libgap.eval("V:=function(x,y,z) return VectorSpace(x,y,z);end;")
+Mapadeciclos = libgap.eval(
+    "Mapadeciclos:=function(Source,Range,cycle)local Im,i,f,D;"
+    "D:=GeneratorsOfVectorSpace(Source);Im:=[];"
+    "for i in [1..Length(cycle)] do "
+    "Add(Im, LinearCombination(Basis(Range), cycle[i][1])); od;"
+    "f:=LeftModuleGeneralMappingByImages(Source, Range, D, Im);"
+    "return f;end;"
+)
 Z_CycleSpace = libgap.eval(
-"Z_CycleSpace:=function(cycles,zlist,Source,f)local K, zSubspace, i, j, aux,
- VerticesOfCycles, CoefficientsOfCycles, T;
- CoefficientsOfCycles:=[];
- if Length(zlist)&gt;0 then
-   K:=BasisVectors(Basis((Kernel(RestrictedMapping(f, Subspace(Source,zlist))))));
-   for i in [1..Length(K)] do
-     Add(CoefficientsOfCycles,Coefficients(Basis(Source), K[i]));
-   od;
- fi;
- T:=CoefficientsOfCycles;
- return T;
- end;"
-);
-
+    "Z_CycleSpace:=function(cycles,zlist,Source,f)local K, zSubspace, i, j, aux, "
+    "VerticesOfCycles, CoefficientsOfCycles, T;"
+    "CoefficientsOfCycles:=[];"
+    "if Length(zlist)&gt;0 then "
+    "K:=BasisVectors(Basis((Kernel(RestrictedMapping(f, Subspace(Source,zlist))))));"
+    "for i in [1..Length(K)] do "
+    "Add(CoefficientsOfCycles,Coefficients(Basis(Source), K[i]));"
+    "od;fi;"
+    "T:=CoefficientsOfCycles;return T;end;"
+)
 BasisComplement = libgap.eval(
-"BasisComplement:=function(Aux_Bzminus,Aux_Ciplus, i, OurDomain,OurField)
- local F,Kzminus,t,BC;
- BC:=[];
- F:=OurField^Length(OurDomain);
- if Length(Aux_Bzminus)&gt;0 then
-   KZminus:=Subspace(F, Aux_Bzminus);
-   for t in [1..Length(Aux_Ciplus[i][1])] do
-     if (Aux_Ciplus[i][1][t] in KZminus)=false then
-       Add(BC, [Aux_Ciplus[i][1][t], Aux_Ciplus[i][2]]);
-       Add(Aux_Bzminus, Aux_Ciplus[i][1][t]);
-       KZminus:=Subspace(F, Aux_Bzminus);
-     fi;
-   od;
- else
-   for t in [1..Length(Aux_Ciplus[i][1])] do
-     Add(BC, [Aux_Ciplus[i][1][t],Aux_Ciplus[i][2]]);
-   od;
- fi;
- return BC;
- end;"
+    "BasisComplement:=function(Aux_Bzminus,Aux_Ciplus, i, OurDomain,OurField) "
+    "local F,Kzminus,t,BC; BC:=[]; F:=OurField^Length(OurDomain);"
+    "if Length(Aux_Bzminus)&gt;0 then "
+    "KZminus:=Subspace(F, Aux_Bzminus);"
+    "for t in [1..Length(Aux_Ciplus[i][1])] do "
+    "if (Aux_Ciplus[i][1][t] in KZminus)=false then "
+    "Add(BC, [Aux_Ciplus[i][1][t], Aux_Ciplus[i][2]]); "
+    "Add(Aux_Bzminus, Aux_Ciplus[i][1][t]); "
+    "KZminus:=Subspace(F, Aux_Bzminus);fi;od;"
+    "else "
+    "for t in [1..Length(Aux_Ciplus[i][1])] do "
+    "Add(BC, [Aux_Ciplus[i][1][t],Aux_Ciplus[i][2]]);od; fi; "
+    "return BC;end;"
 )
 
 
-def HH(X, c, h, y, xplus):
-    # X = extended poset
-    # h = x^*
+def iCycles(X, c):
     # c = characteristic of OurField
-    # y = y^*
-    # xplus = immediate successors of x^*
-    
+    G = X.with_bounds().canonical_label()
+    h = G.minimal_elements()[0]
+    y = G.maximal_elements()[0]
+    xplus = G.upper_covers(h)
+
     if c == 0:
         OurField = QQ
     else:
         OurField = GF(c)
 
-    candidates = list(X)
-
-    countHH = 0
+    candidates = list(G)
     q = 1
 
-    # Building C^1
-    
-    OurDomain = [Indeterminate(OurField, "x")]  
-    iminusCycles = [[1,h]]        
-    
+    OurDomain = [Indeterminate(OurField, "x")]
+    iminusCycles = [[1, h]]
+
     iCycles = []
     for j in xplus:
         iCycles.append([[1], j])
 
     if len(iCycles) == 0:
-        print(" dim HH^i = 0 for all i.")
-        q = -1
-    elif len(iCycles) == 1:
-        print(" dim HH^0 = 1 for i=1.")
-        print(" dim HH^i = 0 for i&gt;1.")
         q = -1
     else:
+        terms = [f" P_{item[1]}" for item in iCycles]
+        result = " + ".join(terms)
         q += 1
 
     while q != -1:
-        
         OurCodomain = OurDomain
         OurDomain = []
 
@@ -362,13 +316,13 @@ def HH(X, c, h, y, xplus):
                 OurDomain.append(
                     Indeterminate(
                         OurField,
-                        StringFormatted("[w^{}_{}, {}]", q-1, i, iCycles[i][1])
+                        StringFormatted("[w^{}_{}, {}]", q - 1, i, iCycles[i][1])
                     )
                 )
 
         SourceSpace = VectorSpace(OurField, OurDomain, "basis")
         RangeSpace = VectorSpace(OurField, OurCodomain, "basis")
-        f = Cyclesmap(SourceSpace, RangeSpace, iCycles)
+        f = Mapadeciclos(SourceSpace, RangeSpace, iCycles)
 
         iminusCycles = []
         for i in range(len(iCycles)):
@@ -378,11 +332,11 @@ def HH(X, c, h, y, xplus):
         Aux_Ciplus = []
 
         for k in candidates:
-            zSubspace = []	
+            zSubspace = []
             for i in range(len(iminusCycles)):
-                if X.is_less_than(iminusCycles[i][1], k):
+                if G.is_less_than(iminusCycles[i][1], k):
                     zSubspace.append(OurDomain[i])
-            if zSubspace != []:		   
+            if zSubspace != []:
                 T = Z_CycleSpace(iminusCycles, zSubspace, SourceSpace, f)
                 if T != []:
                     Aux_Ciplus.append([T, k])
@@ -390,39 +344,76 @@ def HH(X, c, h, y, xplus):
         I = list(range(len(Aux_Ciplus)))
 
         for i in I:
-            Aux_Bzminus = set([])
+            Aux_Bzminus = set()
             for j in I:
-                if Aux_Ciplus[j][1] in X.lower_covers(Aux_Ciplus[i][1]):
+                if Aux_Ciplus[j][1] in G.lower_covers(Aux_Ciplus[i][1]):
                     Aux_Bzminus.update(Aux_Ciplus[j][0])
             BC = BasisComplement(
-                list(Aux_Bzminus),
-                Aux_Ciplus,
-                i+1,
-                OurDomain,
-                OurField
+                list(Aux_Bzminus), Aux_Ciplus, i + 1, OurDomain, OurField
             )
-            if len(BC) != 0: 
-                [iCycles.append(a) for a in BC]
-			
+            if len(BC) != 0:
+                for a in BC:
+                    iCycles.append(a)
+
         if len(iCycles) == 0:
-            print(f" dim HH^i = 0 for i&gt;", q-3)
+            print("The i-Cycles were calculated")
             q = -1
         else:
-            for i in range(len(iCycles)):
-                if iCycles[i][1] == y:
-                    countHH += 1
-
-            if q == 2:
-                print(f" dim HH^", q-2, " = ", countHH + 1)
-            else:
-                print(f" dim HH^", q-2, " = ", countHH)
-            
             q += 1
-            countHH = 0
-</code></pre>
 
-</body>
-</html>
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+import time
+
+
+def PrepareMagma(G):
+    X = G.with_bounds().canonical_label()
+    xstar = X.minimal_elements()[0]
+    m = X.height()
+
+    Z = X.relabel()
+    Z = Z.relabel(lambda s: s + 1)
+    Q = DiGraph([(x, y, 'x' + str(x) + str(y)) for x, y in Z.cover_relations()])
+    SG = Q.path_semigroup()
+    A = SG.algebra(ZZ)
+
+    rels = []
+    for a, b in Z.relations():
+        if Q.in_degree(b) &gt; 1 and Q.out_degree(a) &gt; 1:
+            paths = Q.all_paths(a, b)
+            if len(paths) &gt; 1:
+                prod_paths = [
+                    A.prod(A(Q.edge_label(pa[i], pa[i + 1]))
+                           for i in range(len(pa) - 1))
+                    for pa in paths
+                ]
+                rels += [prod_paths[0] - pi for pi in prod_paths[1:]]
+
+    n = len(Q)
+    var(' '.join([f'e{i}' for i in range(1, n + 1)]))
+    V = [eval(f'e{i}') for i in range(1, n + 1)]
+
+    Lista = Q.num_verts(), [list(e) for e in Q.edges()]
+    L = Lista[1]
+    T = []
+    for element in L:
+        a, b, x = element
+        V.append(var(x))
+        T.append((a, b))
+
+    vars_str = "F&lt;" + ", ".join(str(v) for v in V) + "&gt;"
+    free_algebra_str = f"FreeAlgebra(RationalField(), {len(V)})"
+    rels_str = ", ".join(str(r) for r in rels)
+    pairs_str = ", ".join(f"&lt;{a},{b}&gt;" for a, b in T)
+
+    magma.eval(f"{vars_str} := {free_algebra_str};")
+    magma.eval(f"BA := BasicAlgebra(F, [{rels_str}], {n}, [{pairs_str}]);")
+    magma.eval("S := SimpleModule(BA,1);")
+    magma.eval(f"m_saved := {int(m)};")
+
+    print("Magma is ready")
+</code></pre>
 
 </p>
 
