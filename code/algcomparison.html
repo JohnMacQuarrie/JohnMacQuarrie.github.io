@@ -228,7 +228,15 @@
 
  <p>
    
-<pre><code>
+<style>
+pre.wrap {
+  white-space: pre-wrap;       /* preserve indentation + wrap lines */
+  word-wrap: break-word;       /* legacy */
+  overflow-wrap: break-word;   /* modern */
+}
+</style>
+
+<pre class="wrap"><code>
 Indeterminate = libgap.eval("I:=function(x,y) return Indeterminate(x,y); end;");
 StringFormatted = libgap.eval("S:=function(x,y,z,w) return StringFormatted(x,y,z,w);end;");
 StF = libgap.eval("St:=function(x,y,z) return StringFormatted(x,y,z);end;");
@@ -243,7 +251,7 @@ def iCycles(X, c):
     h = G.minimal_elements()[0]
     y = G.maximal_elements()[0]
     xplus = G.upper_covers(h)
-    
+
     if c == 0:
         OurField = QQ
     else:
@@ -251,9 +259,9 @@ def iCycles(X, c):
 
     candidates = list(G)
     q = 1
-    OurDomain = [Indeterminate(OurField, "x")]  
-    iminusCycles = [[1,h]]        
-    
+    OurDomain = [Indeterminate(OurField, "x")]
+    iminusCycles = [[1,h]]
+
     iCycles = []
     for j in xplus:
         iCycles.append([[1], j])
@@ -262,7 +270,7 @@ def iCycles(X, c):
         q = -1
     else:
         q += 1
-    
+
     while q != -1:
         OurCodomain = OurDomain
         OurDomain = []
@@ -286,15 +294,15 @@ def iCycles(X, c):
         Aux_Ciplus = []
 
         for k in candidates:
-            zSubspace=[]    
-            for i in  range(len(iminusCycles)):
+            zSubspace=[]
+            for i in range(len(iminusCycles)):
                 if G.is_less_than(iminusCycles[i][1], k):
-                    zSubspace.append(OurDomain[i])         
-            if zSubspace != []:           
+                    zSubspace.append(OurDomain[i])
+            if zSubspace != []:
                 T = Z_CycleSpace(iminusCycles,zSubspace,SourceSpace,f)
                 if T != []:
                     Aux_Ciplus.append([T, k])
-                    
+
         I = list(range(len(Aux_Ciplus)))
 
         for i in I:
@@ -303,9 +311,9 @@ def iCycles(X, c):
                 if Aux_Ciplus[j][1] in G.lower_covers(Aux_Ciplus[i][1]):
                     Aux_Bzminus.update(Aux_Ciplus[j][0])
             BC = BasisComplement(list(Aux_Bzminus),Aux_Ciplus, i+1, OurDomain,OurField)
-            if len(BC) != 0: 
+            if len(BC) != 0:
                 [iCycles.append(a) for a in BC]
-            
+
         if len(iCycles) == 0:
             q = -1
         else:
